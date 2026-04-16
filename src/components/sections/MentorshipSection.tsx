@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const MentorshipSection = () => (
   <section className="py-32 bg-white">
-    <div className="container mx-auto px-6">
+    <div className="container">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-20">
           <div className="inline-block px-4 py-1.5 bg-diners-lakefront/10 text-diners-lakefront text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">

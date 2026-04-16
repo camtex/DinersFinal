@@ -15,7 +15,7 @@ export const EcosystemSection = () => (
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-diners-lakefront via-transparent to-transparent" />
     </div>
     
-    <div className="container mx-auto px-6 relative z-10">
+    <div className="container relative z-10">
       <div className="text-center max-w-3xl mx-auto mb-20">
         <div className="inline-block px-4 py-1.5 bg-diners-blue-sky/20 text-diners-blue-sky text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">
           El Ecosistema ELLAS DIGITAL

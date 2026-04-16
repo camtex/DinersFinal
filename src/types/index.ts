@@ -20,10 +20,13 @@ export interface Category {
 
 export interface QuizQuestion {
   id: number;
+  category: string;
   question: string;
+  helper?: string;
   options: {
     text: string;
-    trait: string;
+    tag: string;
+    scores: Record<string, number>;
   }[];
 }
 

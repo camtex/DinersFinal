@@ -4,7 +4,7 @@ import { CATEGORIES } from '../../data/mockData';
 
 export const CategoriesSection = () => (
   <section id="categorias" className="py-20 bg-white">
-    <div className="container mx-auto px-4">
+    <div className="container">
       <div className="text-center max-w-2xl mx-auto mb-16">
         <h2 className="text-3xl font-bold text-diners-twilight mb-4">Nuestras Áreas</h2>
         <p className="text-diners-twilight-65">Explora los diferentes mundos dentro de Diners Club Perú.</p>

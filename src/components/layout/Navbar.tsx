@@ -1,31 +1,54 @@
+import { Link, NavLink } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 type NavbarProps = {
   logoSrc?: string;
 };
 
+const navItems = [
+  { to: '/', label: 'Inicio', end: true },
+  { to: '/ecosistema', label: 'Propuesta' },
+  { to: '/explora', label: 'Rutas' },
+  { to: '/postula', label: 'Postula' },
+];
+
 export const Navbar = ({ logoSrc }: NavbarProps) => (
-  <nav className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-diners-gray-1">
-    <div className="container h-20 flex items-center justify-between gap-6">
-      <div className="flex items-center gap-3">
+  <nav className="sticky top-0 z-50 w-full border-b border-white/35 bg-white/58 shadow-[0_10px_35px_rgba(4,30,66,0.06)] backdrop-blur-xl">
+    <div className="container flex h-20 items-center justify-between gap-6">
+      <Link to="/" className="flex items-center gap-3">
         {logoSrc ? (
-          <img src="ColorDC_horizontal.png" alt="Logo Diners Club" className="h-11 w-auto object-contain" />
+          <img src={logoSrc} alt="Logo Diners Club" className="h-11 w-auto object-contain" />
         ) : (
-          <div className="w-10 h-10 bg-diners-twilight rounded-lg flex items-center justify-center shadow-sm">
-            <span className="text-white font-black text-sm">D</span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-diners-twilight shadow-sm">
+            <span className="text-sm font-black text-white">D</span>
           </div>
         )}
         <div className="flex flex-col">
-          <span className="font-black text-diners-twilight tracking-tight text-lg leading-none">Diners Club</span>
-          <span className="font-light text-diners-lakefront text-xs uppercase tracking-[0.2em]">Peru</span>
+          <span className="text-lg font-black leading-none tracking-tight text-diners-twilight">Diners Club</span>
+          <span className="text-xs font-medium uppercase tracking-[0.22em] text-diners-lakefront">Peru</span>
         </div>
-      </div>
-      <div className="hidden md:flex items-center gap-8 lg:gap-10">
-        <a href="#inicio" className="text-xs font-bold uppercase tracking-widest text-diners-twilight hover:text-diners-lakefront transition-all">Inicio</a>
-        <a href="#explorar" className="text-xs font-bold uppercase tracking-widest text-diners-twilight hover:text-diners-lakefront transition-all">Explorar</a>
-        <a href="#rutas" className="text-xs font-bold uppercase tracking-widest text-diners-twilight hover:text-diners-lakefront transition-all">Rutas</a>
-        <Button variant="default" className="bg-diners-twilight hover:bg-diners-lakefront text-white rounded-full px-8 h-11 font-bold shadow-md hover:shadow-lg transition-all">
-          Ver Vacantes
+      </Link>
+
+      <div className="hidden items-center gap-3 md:flex">
+        {navItems.map(item => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.end}
+            className={({ isActive }) =>
+              `rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] transition-all ${
+                isActive
+                  ? 'bg-diners-blue-sky text-white shadow-md'
+                  : 'text-diners-twilight hover:bg-diners-blue-sky/10 hover:text-diners-hover'
+              }`
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
+
+        <Button asChild variant="default" className="ml-2 h-11 rounded-full bg-diners-blue-sky px-8 font-bold text-white shadow-md transition-all hover:bg-diners-hover hover:shadow-lg">
+          <Link to="/postula">Quiero participar</Link>
         </Button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export const CareerPathSection = () => (
   <section className="py-32 bg-diners-white-sand/20">
-    <div className="container mx-auto px-6">
+    <div className="container">
       <div className="text-center max-w-3xl mx-auto mb-20">
         <div className="inline-block px-4 py-1.5 bg-diners-twilight/10 text-diners-twilight text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">
           Línea de Carrera

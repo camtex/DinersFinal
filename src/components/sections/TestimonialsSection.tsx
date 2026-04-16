@@ -2,7 +2,7 @@
 
 export const TestimonialsSection = () => (
   <section className="py-32 bg-white">
-    <div className="container mx-auto px-6">
+    <div className="container">
       <div className="text-center max-w-3xl mx-auto mb-20">
         <div className="inline-block px-4 py-1.5 bg-diners-blue-sky/10 text-diners-blue-sky text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">
           Voces que Inspiran

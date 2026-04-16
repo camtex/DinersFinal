@@ -26,7 +26,7 @@ export const ResultsSection = ({
   scrollToExploration
 }: ResultsSectionProps) => {
   return (
-    <div className="container mx-auto px-4">
+    <div className="container">
       {!selectedRole ? (
         <>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

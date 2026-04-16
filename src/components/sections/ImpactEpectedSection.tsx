@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 
 export const ImpactExpectedSection = () => (
   <section className="py-20 bg-diners-twilight text-white">
-    <div className="container mx-auto px-4">
+    <div className="container">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl font-black mb-12">Nuestro Impacto Esperado</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">

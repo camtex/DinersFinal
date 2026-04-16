@@ -1,4 +1,4 @@
-import { BookOpen, Trophy, Globe, TrendingUp, Zap } from 'lucide-react'
+import { BookOpen, Trophy } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -7,7 +7,7 @@ import { LEARNING_PATHS, CHALLENGES } from '@/data/mockData'
 
 export const LearningAndChallenges = () => (
   <section className="py-20 bg-white">
-    <div className="container mx-auto px-4">
+    <div className="container">
       <div className="grid lg:grid-cols-2 gap-12">
         <div>
           <div className="flex items-center gap-3 mb-8">

@@ -3,7 +3,7 @@ import { Star, Globe, Clock, Users, MapPin } from 'lucide-react';
 
 export const ImpactSection = () => (
   <section className="py-32 bg-diners-white-sand/30">
-    <div className="container mx-auto px-6">
+    <div className="container">
       <div className="grid lg:grid-cols-12 gap-16 items-center">
         <div className="lg:col-span-7">
           <div className="inline-block px-4 py-1.5 bg-diners-lakefront/10 text-diners-lakefront text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-8">
