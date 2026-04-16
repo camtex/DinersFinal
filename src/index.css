@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&family=Cormorant+Garamond&display=swap');
+
+@import "tailwindcss";
+@import "tailwindcss-animate";
+
+/* Variables base */
+:root {
+    --background: #F7F7F7;
+    --foreground: #041E42;
+    --border: #BBBCBC;
+    --ring: #004C97;
+}
+
+/* Base styles */
+@layer base {
+  * {
+    border: 1px solid var(--border);
+    outline: 1px solid var(--ring);
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  html {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
