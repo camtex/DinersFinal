@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar.tsx';
 import { Footer } from './components/layout/Footer.tsx';
+import { ScrollToTop } from './components/layout/ScrollToTop.tsx';
 import { HomePage } from './pages/HomePage';
 import { EcosystemPage } from './pages/EcosystemPage';
 import { ExplorationPage } from './pages/ExplorationPage';
@@ -36,6 +37,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-diners-white-sand font-sans selection:bg-diners-blue-sky/30">
+      <ScrollToTop />
       <Navbar logoSrc={brandLogoSrc} />
 
       <main className="relative">
