@@ -1,43 +1,72 @@
 import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { BriefcaseBusiness, FileSearch, Link2, Search, Sparkles, Upload, UserRound } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FileSearch, Link2, LogOut, Search, Sparkles, Upload,
+  UserRound, Briefcase, ChevronRight, RotateCcw, Trash2
+} from 'lucide-react';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TRAIT_LABELS, VACANCIES } from '@/data/mockData';
 import {
   clearPendingVacancyApplication,
-  getStoredApplications,
+  clearStoredUserProfile,
   getPendingVacancyApplication,
+  getStoredApplications,
   getStoredQuizTraits,
   getStoredUserProfile,
   savePendingVacancyApplication,
   saveVacancyApplication,
 } from '@/lib/dashboardStorage';
+import { signOutSession } from '@/auth';
 
 export const DashboardPage = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const [applications, setApplications] = useState(getStoredApplications);
-  const [pendingVacancy, setPendingVacancy] = useState(getPendingVacancyApplication);
-  const [applicationMessage, setApplicationMessage] = useState('');
+
+  // Estados reactivos para que la UI se actualice al borrar
+  const [applications, setApplications] = useState(getStoredApplications());
+  const [quizTraits, setQuizTraits] = useState(getStoredQuizTraits());
+  const [pendingVacancy, setPendingVacancy] = useState(getPendingVacancyApplication());
 
   const profile = getStoredUserProfile();
-  const quizTraits = getStoredQuizTraits();
   const fullName = profile?.fullName || [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') || 'Talento Diners';
+
   const [applicationForm, setApplicationForm] = useState({
     fullName,
     linkedinUrl: '',
     cvFileName: '',
   });
 
+  // --- LÓGICA DE RESET SUTIL ---
+  const handleFullReset = () => {
+    // Borramos datos específicos de la demo pero mantenemos la sesión del usuario
+    localStorage.removeItem('diners_applications');
+    localStorage.removeItem('diners_quiz_traits');
+    localStorage.removeItem('diners_pending_vacancy');
+
+    // Actualizamos estados locales
+    setApplications([]);
+    setQuizTraits([]);
+    setPendingVacancy(null);
+
+    // Opcional: feedback visual o recarga
+    console.log("Demo reiniciada");
+  };
+
+  const handleRemoveSingleApplication = (vacancyId: string) => {
+    const current = JSON.parse(localStorage.getItem('diners_applications') || '[]');
+    const filtered = current.filter((app: any) => app.vacancyId !== vacancyId);
+    localStorage.setItem('diners_applications', JSON.stringify(filtered));
+    setApplications(filtered);
+  };
+  // -----------------------------
+
   const filteredVacancies = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-
     if (!normalizedQuery) return VACANCIES;
-
     return VACANCIES.filter(vacancy =>
       [vacancy.title, vacancy.area, vacancy.type, vacancy.description]
         .join(' ')
@@ -47,22 +76,16 @@ export const DashboardPage = () => {
   }, [query]);
 
   const handleApply = (vacancyId: string) => {
-    const selectedVacancy = VACANCIES.find(vacancy => vacancy.id === vacancyId);
+    const selectedVacancy = VACANCIES.find(v => v.id === vacancyId);
     if (!selectedVacancy) return;
-
-    setApplicationMessage('');
     setPendingVacancy(savePendingVacancyApplication(selectedVacancy));
   };
 
   const handleSubmitApplication = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!pendingVacancy || !applicationForm.fullName || !applicationForm.linkedinUrl || !applicationForm.cvFileName) return;
 
-    if (!pendingVacancy || !applicationForm.fullName || !applicationForm.linkedinUrl || !applicationForm.cvFileName) {
-      setApplicationMessage('Completa tu nombre, LinkedIn y adjunta tu CV para enviar la postulacion.');
-      return;
-    }
-
-    const nextApplications = saveVacancyApplication({
+    const nextApps = saveVacancyApplication({
       vacancyId: pendingVacancy.vacancyId,
       vacancyTitle: pendingVacancy.vacancyTitle,
       area: pendingVacancy.area,
@@ -71,264 +94,201 @@ export const DashboardPage = () => {
       cvFileName: applicationForm.cvFileName,
     });
 
-    setApplications(nextApplications);
-    setApplicationMessage('Tu postulacion fue enviada correctamente y ya aparece en tu historial.');
+    setApplications(nextApps);
     clearPendingVacancyApplication();
     setPendingVacancy(null);
+  };
+
+  const handleLogout = async () => {
+    await signOutSession();
+    clearStoredUserProfile();
+    navigate('/');
   };
 
   return (
     <>
       <PageIntro
-        variant="light"
+        variant="diners-blue"
         eyebrow="Dashboard"
-        title="Tu espacio personal para seguir tu ruta"
-        description="Aqui puedes revisar tu perfil, tus postulaciones, el resultado de tu test y explorar nuevas vacantes sin salir de la plataforma."
+        title="Tu espacio personal"
+        description="Gestiona tu carrera y descubre nuevas oportunidades."
         imageSrc="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2070"
       />
 
-      <section className="bg-diners-white-sand py-16">
-        <div className="container grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+      <section className="bg-white py-12">
+        <div className="container grid gap-8 xl:grid-cols-[0.8fr_1.2fr]">
+
           <div className="space-y-8">
-            <Card className="rounded-[2rem] border border-diners-gray-1/80 shadow-[0_16px_40px_rgba(4,30,66,0.06)]">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-diners-blue-sky/10 text-diners-blue-sky">
+            {/* CARD DE PERFIL CON RESET SUTIL */}
+            <div className="group relative overflow-hidden rounded-[2.5rem] border border-diners-gray-1/30 bg-white p-8 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#041E42] text-white">
                     <UserRound className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-diners-tidepool">Perfil</p>
-                    <CardTitle className="text-2xl font-black text-diners-twilight">{fullName}</CardTitle>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                <div className="rounded-[1.5rem] bg-diners-white-sand p-5">
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-diners-twilight-65">Correo</p>
-                  <p className="mt-2 text-sm text-diners-twilight">{profile?.email || 'Aun no registras un correo en esta sesion.'}</p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[1.5rem] bg-diners-blue-sky p-5 text-white">
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/75">Vacantes postuladas</p>
-                    <p className="mt-3 text-3xl font-black">{applications.length}</p>
-                  </div>
-                  <div className="rounded-[1.5rem] border border-diners-gray-1/80 bg-white p-5">
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-diners-twilight-65">Resultado del test</p>
-                    <p className="mt-3 text-3xl font-black text-diners-twilight">{quizTraits.length || 0}</p>
-                    <p className="mt-1 text-xs text-diners-twilight-65">rasgos destacados</p>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[#00A3E0]">Candidato</span>
+                    <h2 className="text-xl font-black text-diners-twilight">{fullName}</h2>
                   </div>
                 </div>
 
-                <div className="rounded-[1.6rem] border border-diners-gray-1/80 bg-white p-5">
-                  <div className="mb-4 flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-diners-hover/10 text-diners-hover">
-                      <Upload className="h-5 w-5" />
+                {/* BOTONES DE ACCIÓN SUTILES */}
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleFullReset}
+                    title="Reiniciar Demo"
+                    className="h-9 w-9 rounded-full text-diners-twilight-65 hover:bg-orange-50 hover:text-orange-500 transition-colors"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleLogout}
+                    className="h-9 w-9 rounded-full text-diners-twilight-65 hover:bg-red-50 hover:text-red-500"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl bg-diners-white-sand/40 p-4 border border-diners-gray-1/10">
+                  <p className="text-[9px] font-black uppercase text-diners-twilight-65">Postulaciones</p>
+                  <p className="text-xl font-black text-diners-twilight">{applications.length}</p>
+                </div>
+                <div className="rounded-2xl bg-diners-white-sand/40 p-4 border border-diners-gray-1/10">
+                  <p className="text-[9px] font-black uppercase text-diners-twilight-65">Afinidades</p>
+                  <p className="text-xl font-black text-diners-twilight">{quizTraits.length}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* FORMULARIO PENDIENTE */}
+            {pendingVacancy && (
+              <Card className="rounded-[2rem] border-2 border-diners-blue-sky/30 bg-white p-1 shadow-xl shadow-blue-900/5">
+                <CardContent className="p-6 space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Upload className="h-5 w-5 text-diners-blue-sky" />
+                    <h3 className="font-bold text-sm text-diners-twilight uppercase">Postular a {pendingVacancy.vacancyTitle}</h3>
+                  </div>
+                  <form onSubmit={handleSubmitApplication} className="space-y-3">
+                    <Input
+                      placeholder="LinkedIn URL"
+                      value={applicationForm.linkedinUrl}
+                      onChange={e => setApplicationForm(p => ({ ...p, linkedinUrl: e.target.value }))}
+                      className="rounded-xl h-10 text-sm"
+                    />
+                    <Input
+                      type="file"
+                      onChange={e => setApplicationForm(p => ({ ...p, cvFileName: e.target.files?.[0]?.name || '' }))}
+                      className="rounded-xl h-10 text-[10px] file:bg-[#041E42] file:text-white file:border-none file:rounded file:px-2 file:mr-2"
+                    />
+                    <div className="flex gap-2">
+                      <Button type="submit" className="flex-1 rounded-full bg-diners-blue-sky h-9 text-xs">Enviar</Button>
+                      <Button type="button" variant="ghost" onClick={() => setPendingVacancy(null)} className="rounded-full h-9 text-xs">Cancelar</Button>
                     </div>
+                  </form>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* HISTORIAL CON OPCIÓN DE BORRAR INDIVIDUAL */}
+            <div className="space-y-4">
+              <h3 className="text-[10px] font-black uppercase tracking-widest text-diners-twilight-65 flex items-center gap-2 px-2">
+                <Briefcase className="h-3 w-3" /> Historial
+              </h3>
+              <div className="space-y-2">
+                {applications.map(app => (
+                  <div key={app.id} className="group flex items-center justify-between rounded-2xl border border-diners-gray-1/20 bg-white p-4 transition-all hover:border-diners-blue-sky/30">
                     <div>
-                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-diners-tidepool">Postulacion</p>
-                      <p className="text-lg font-black text-diners-twilight">
-                        {pendingVacancy ? pendingVacancy.vacancyTitle : 'Selecciona una vacante para postular'}
-                      </p>
+                      <p className="text-sm font-bold text-diners-twilight">{app.vacancyTitle}</p>
+                      <p className="text-[10px] text-diners-twilight-65 uppercase">{app.area}</p>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveSingleApplication(app.vacancyId)}
+                      className="h-8 w-8 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-
-                  {pendingVacancy ? (
-                    <form onSubmit={handleSubmitApplication} className="space-y-4">
-                      <div className="rounded-[1.2rem] bg-diners-white-sand p-4 text-sm text-diners-twilight-65">
-                        Estas postulando a <span className="font-bold text-diners-twilight">{pendingVacancy.vacancyTitle}</span> en {pendingVacancy.area}.
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase tracking-[0.16em] text-diners-twilight-65">Nombre completo</Label>
-                        <Input
-                          value={applicationForm.fullName}
-                          onChange={event => setApplicationForm(prev => ({ ...prev, fullName: event.target.value }))}
-                          className="h-12 rounded-2xl border-diners-gray-1 bg-white"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-diners-twilight-65">
-                          <Link2 className="h-3.5 w-3.5" />
-                          LinkedIn
-                        </Label>
-                        <Input
-                          type="url"
-                          placeholder="https://www.linkedin.com/in/tu-perfil"
-                          value={applicationForm.linkedinUrl}
-                          onChange={event => setApplicationForm(prev => ({ ...prev, linkedinUrl: event.target.value }))}
-                          className="h-12 rounded-2xl border-diners-gray-1 bg-white"
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black uppercase tracking-[0.16em] text-diners-twilight-65">Adjuntar CV</Label>
-                        <Input
-                          type="file"
-                          accept=".pdf,.doc,.docx"
-                          className="h-12 rounded-2xl border-diners-gray-1 bg-white file:font-bold"
-                          onChange={event => {
-                            const fileName = event.target.files?.[0]?.name || '';
-                            setApplicationForm(prev => ({ ...prev, cvFileName: fileName }));
-                          }}
-                        />
-                      </div>
-
-                      {applicationMessage && (
-                        <div className="rounded-[1.2rem] bg-diners-blue-sky/8 p-4 text-sm text-diners-twilight">
-                          {applicationMessage}
-                        </div>
-                      )}
-
-                      <div className="flex flex-col gap-3 sm:flex-row">
-                        <Button type="submit">Enviar postulacion</Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => {
-                            clearPendingVacancyApplication();
-                            setPendingVacancy(null);
-                            setApplicationMessage('');
-                          }}
-                        >
-                          Cancelar
-                        </Button>
-                      </div>
-                    </form>
-                  ) : (
-                    <div className="rounded-[1.2rem] border border-diners-gray-1/80 border-dashed bg-diners-white-sand p-4 text-sm text-diners-twilight-65">
-                      Elige una vacante y aqui se habilitara el formulario de postulacion con nombre completo, LinkedIn y CV.
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-diners-tidepool">Historial de postulacion</p>
-                    <Link to="/vacantes" className="text-xs font-bold text-diners-blue-sky hover:text-diners-hover">Ver vacantes</Link>
-                  </div>
-                  <div className="space-y-3">
-                    {applications.length > 0 ? (
-                      applications.map(application => (
-                        <div key={application.id} className="rounded-[1.35rem] border border-diners-gray-1/80 bg-white p-4">
-                          <p className="font-bold text-diners-twilight">{application.vacancyTitle}</p>
-                          <p className="mt-1 text-sm text-diners-twilight-65">{application.area}</p>
-                          <p className="mt-2 text-xs text-diners-twilight-65">CV: {application.cvFileName}</p>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="rounded-[1.35rem] border border-diners-gray-1/80 border-dashed bg-white p-5 text-sm text-diners-twilight-65">
-                        Aun no has postulado a una vacante. Puedes hacerlo desde las tarjetas de vacantes o desde este dashboard.
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-8">
-            <Card className="rounded-[2rem] border border-diners-gray-1/80 shadow-[0_16px_40px_rgba(4,30,66,0.06)]">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-diners-hover/10 text-diners-hover">
-                    <Sparkles className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-diners-tidepool">Resultado del test</p>
-                    <CardTitle className="text-2xl font-black text-diners-twilight">Tus afinidades actuales</CardTitle>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {quizTraits.length > 0 ? (
-                  <div className="flex flex-wrap gap-3">
-                    {quizTraits.map(trait => (
-                      <div key={trait} className="rounded-full bg-diners-blue-sky/10 px-4 py-2 text-sm font-bold text-diners-blue-sky">
-                        {TRAIT_LABELS[trait] || trait}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-[1.5rem] border border-diners-gray-1/80 border-dashed bg-diners-white-sand p-6 text-sm text-diners-twilight-65">
-                    Todavia no tenemos un resultado guardado. Haz el quiz en la seccion de rutas y aqui apareceran tus rasgos principales.
-                    <div className="mt-4">
-                      <Button onClick={() => navigate('/explora')}>Hacer el quiz</Button>
-                    </div>
+            {/* AFINIDADES DINÁMICAS */}
+            <div className="rounded-[2.5rem] bg-[#041E42] p-8 text-white shadow-lg">
+              <div className="flex items-center gap-3 mb-6">
+                <Sparkles className="h-4 w-4 text-diners-blue-sky" />
+                <h3 className="text-base font-black uppercase tracking-wider">Afinidades</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {quizTraits.length > 0 ? quizTraits.map(t => (
+                  <span key={t} className="rounded-full bg-white/10 px-4 py-1.5 text-[11px] font-bold border border-white/5">
+                    {TRAIT_LABELS[t] || t}
+                  </span>
+                )) : (
+                  <div className="w-full text-center py-4">
+                    <p className="text-xs text-white/40 mb-3 italic text-balance">Haz el test para personalizar tus recomendaciones.</p>
+                    <Button
+                      onClick={() => navigate('/explora')}
+                      className="rounded-full bg-diners-blue-sky text-white hover:bg-white hover:text-[#041E42] h-9 px-6 text-[11px] font-bold transition-all shadow-lg shadow-blue-400/20 border-none"
+                    >
+                      Descubrir mis rasgos
+                    </Button>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
-            <Card className="rounded-[2rem] border border-diners-gray-1/80 shadow-[0_16px_40px_rgba(4,30,66,0.06)]">
-              <CardHeader className="space-y-4">
-                <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.22em] text-diners-tidepool">Vacantes disponibles</p>
-                    <CardTitle className="text-2xl font-black text-diners-twilight">Busca oportunidades manualmente</CardTitle>
-                  </div>
-                  <div className="rounded-full bg-diners-white-sand px-4 py-2 text-sm font-bold text-diners-twilight">
-                    {filteredVacancies.length} resultados
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-diners-twilight-65" />
+            {/* LISTA DE VACANTES */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-2">
+                <h3 className="text-xl font-black text-diners-twilight">Vacantes</h3>
+                <div className="relative w-48">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-diners-twilight-65" />
                   <Input
+                    placeholder="Filtrar..."
                     value={query}
-                    onChange={event => setQuery(event.target.value)}
-                    placeholder="Buscar por cargo, area o modalidad"
-                    className="h-12 rounded-full border-diners-gray-1 bg-white pl-11"
+                    onChange={e => setQuery(e.target.value)}
+                    className="h-9 rounded-full pl-9 text-xs border-diners-gray-1/30"
                   />
                 </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {filteredVacancies.length > 0 ? (
-                  filteredVacancies.map(vacancy => {
-                    const applied = applications.some(item => item.vacancyId === vacancy.id);
+              </div>
 
-                    return (
-                      <article key={vacancy.id} className="rounded-[1.6rem] border border-diners-gray-1/80 bg-white p-5">
-                        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap gap-2">
-                              <span className="rounded-full bg-diners-blue-sky/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-diners-blue-sky">
-                                {vacancy.area}
-                              </span>
-                              <span className="rounded-full bg-diners-hover/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-diners-hover">
-                                {vacancy.type}
-                              </span>
-                            </div>
-                            <div>
-                              <h3 className="text-xl font-black text-diners-twilight">{vacancy.title}</h3>
-                              <p className="mt-2 text-sm leading-relaxed text-diners-twilight-65">{vacancy.description}</p>
-                            </div>
-                          </div>
-
-                          <div className="flex shrink-0 flex-col gap-2 md:items-end">
-                            <Button type="button" onClick={() => handleApply(vacancy.id)} disabled={applied}>
-                              {applied ? 'Ya postulaste' : 'Postula'}
-                            </Button>
-                            <Link to="/vacantes" className="inline-flex items-center gap-2 text-xs font-bold text-diners-blue-sky hover:text-diners-hover">
-                              <BriefcaseBusiness className="h-4 w-4" />
-                              Ver detalle
-                            </Link>
-                          </div>
+              <div className="grid gap-4">
+                {filteredVacancies.map(vacancy => {
+                  const isApplied = applications.some(a => a.vacancyId === vacancy.id);
+                  return (
+                    <div key={vacancy.id} className="group rounded-[2rem] border border-diners-gray-1/30 bg-white p-6 transition-all hover:border-diners-blue-sky/50 shadow-sm">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <span className="text-[9px] font-black uppercase text-diners-blue-sky">{vacancy.area}</span>
+                          <h4 className="text-lg font-black text-diners-twilight">{vacancy.title}</h4>
                         </div>
-                      </article>
-                    );
-                  })
-                ) : (
-                  <div className="rounded-[1.6rem] border border-diners-gray-1/80 border-dashed bg-diners-white-sand p-8 text-center">
-                    <FileSearch className="mx-auto h-10 w-10 text-diners-blue-sky" />
-                    <p className="mt-4 text-lg font-bold text-diners-twilight">No encontramos vacantes con esa busqueda.</p>
-                    <p className="mt-2 text-sm text-diners-twilight-65">Prueba con otra palabra clave como data, desarrollo, seguridad o UX.</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+
+                        <Button
+                          onClick={() => handleApply(vacancy.id)}
+                          disabled={isApplied}
+                          className={`rounded-full h-9 text-xs px-6 ${isApplied ? 'bg-green-50 text-green-600 border border-green-100 hover:bg-green-50' : 'bg-[#041E42] hover:bg-diners-blue-sky shadow-md'}`}
+                        >
+                          {isApplied ? 'Postulado' : 'Aplicar'}
+                          {!isApplied && <ChevronRight className="ml-1 h-3 w-3" />}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
     </>

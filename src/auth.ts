@@ -1,7 +1,10 @@
 import {
+  GoogleAuthProvider,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
+  signInWithPopup,
   signInWithEmailLink,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebase";
@@ -19,7 +22,7 @@ const EMAIL_KEY = "diners.emailForSignIn";
 const PROFILE_KEY = "diners.pendingProfile";
 
 const getActionCodeSettings = () => ({
-  url: window.location.href,
+  url: `${window.location.origin}/postula`,
   handleCodeInApp: true,
 });
 
@@ -71,4 +74,14 @@ export const completeEmailLinkAccess = async (url: string) => {
     user: result.user,
     profile: pendingProfile,
   };
+};
+
+export const signInWithGoogleAccount = async () => {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  return signInWithPopup(auth, provider);
+};
+
+export const signOutSession = async () => {
+  await signOut(auth);
 };

@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronRight } from 'lucide-react';
-import { getStoredUserProfile } from '@/lib/dashboardStorage';
 
 const navItems = [
   { to: '/', label: 'Inicio', end: true },
@@ -12,14 +11,13 @@ const navItems = [
   { to: '/vacantes', label: 'Vacantes' },
 ];
 
-export const Navbar = ({ logoSrc }: { logoSrc?: string }) => {
+export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLoggedIn?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const logoPath = isOpen
     ? "/TDC_horizontal.png"
     : (logoSrc || "/ColorDC_horizontal.png");
 
-  const isLoggedIn = Boolean(getStoredUserProfile());
   const ctaPath = isLoggedIn ? '/dashboard' : '/postula';
   const ctaLabel = isLoggedIn ? 'Perfil' : 'Iniciar';
 

@@ -33,6 +33,12 @@ export const saveStoredUserProfile = (profile: UserProfile) => {
   writeJson(USER_PROFILE_KEY, profile);
 };
 
+export const clearStoredUserProfile = () => {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(USER_PROFILE_KEY);
+  }
+};
+
 export const getStoredQuizTraits = () => readJson<string[]>(QUIZ_TRAITS_KEY, []);
 
 export const saveStoredQuizTraits = (traits: string[]) => {
@@ -101,4 +107,12 @@ export const saveVacancyApplication = (application: Omit<VacancyApplication, "id
 
   writeJson(APPLICATIONS_KEY, nextApplications);
   return nextApplications;
+};
+
+// Esta función elimina una postulación específica por su ID de vacante
+export const removeVacancyApplication = (vacancyId: string) => {
+  const current = JSON.parse(localStorage.getItem('diners_applications') || '[]');
+  const filtered = current.filter((app: any) => app.vacancyId !== vacancyId);
+  localStorage.setItem('diners_applications', JSON.stringify(filtered));
+  return filtered;
 };

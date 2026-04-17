@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar.tsx';
 import { Footer } from './components/layout/Footer.tsx';
@@ -12,7 +12,9 @@ import { VacanciesPage } from './pages/VacanciesPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ROLES } from './data/mockData';
 import { isUserRegistered, setPostLoginRedirect } from './lib/dashboardStorage';
+import { auth } from './firebase';
 import type { Role } from './types';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const ProtectedDashboardRoute = () => {
   if (isUserRegistered()) {
@@ -26,6 +28,7 @@ const ProtectedDashboardRoute = () => {
 export default function App() {
   const brandLogoSrc = '';
   const heroImageSrc = '';
+  const [isLoggedIn, setIsLoggedIn] = useState(isUserRegistered());
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -48,10 +51,18 @@ export default function App() {
     document.getElementById('explorar')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setIsLoggedIn(Boolean(user) || isUserRegistered());
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <div className="min-h-screen bg-diners-white-sand font-sans selection:bg-diners-blue-sky/30">
       <ScrollToTop />
-      <Navbar logoSrc={brandLogoSrc} />
+      <Navbar logoSrc={brandLogoSrc} isLoggedIn={isLoggedIn} />
 
       <main className="relative">
         <Routes>
