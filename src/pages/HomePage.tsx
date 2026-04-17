@@ -3,7 +3,6 @@ import { Hero } from '@/components/sections/Hero';
 import { ImpactSection } from '@/components/sections/ImpactSection';
 import { EcosystemSection } from '@/components/sections/EcosystemSection';
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
-import { ConclusionSection } from '@/components/sections/ConclusionSection';
 
 type HomePageProps = {
   heroImageSrc?: string;
@@ -22,7 +21,7 @@ export const HomePage = ({ heroImageSrc }: HomePageProps) => {
       <ImpactSection />
       <EcosystemSection />
       <TestimonialsSection />
-      <ConclusionSection />
+      {/*<Conclusion Section />*/}
     </>
   );
 };

@@ -1,12 +1,12 @@
 
 import { motion } from 'framer-motion'
-import { 
-  Search, 
-  BookOpen, 
-  Trophy, 
-  MessageSquare, 
-  FileText, 
-  Rocket 
+import {
+  Search,
+  BookOpen,
+  Trophy,
+  MessageSquare,
+  FileText,
+  Rocket
 } from 'lucide-react';
 
 export const EcosystemSection = () => (
@@ -14,16 +14,16 @@ export const EcosystemSection = () => (
     <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-diners-lakefront via-transparent to-transparent" />
     </div>
-    
+
     <div className="container relative z-10">
       <div className="text-center max-w-3xl mx-auto mb-20">
-        <div className="inline-block px-4 py-1.5 bg-diners-blue-sky/20 text-diners-blue-sky text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">
+        {/* <div className="inline-block px-4 py-1.5 bg-diners-blue-sky/20 text-diners-blue-sky text-[10px] font-black uppercase tracking-[0.2em] rounded-full mb-6">
           El Ecosistema ELLAS DIGITAL
-        </div>
+        </div>*/}
         <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight">De la Exploración al <br /><span className="text-diners-blue-sky">Éxito Profesional</span></h2>
         <p className="text-lg font-light text-diners-gray-1">Integramos cada etapa de tu crecimiento para transformar tu aprendizaje en una trayectoria real.</p>
       </div>
-  
+
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
           { icon: <Search className="w-6 h-6" />, title: "Quiz Vocacional", desc: "Identifica tus fortalezas y áreas de interés en el mundo digital.", color: "bg-diners-lakefront" },

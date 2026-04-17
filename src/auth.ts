@@ -10,13 +10,13 @@ import {
 
 const provider = new GoogleAuthProvider();
 
-// 🔐 Login con Google
+// ðŸ” Login con Google
 export const loginWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     return result.user;
 };
 
-// 🔐 Login con email
+// ðŸ” Login con email
 export const loginWithEmail = async (
     email: string,
     password: string
@@ -25,7 +25,7 @@ export const loginWithEmail = async (
     return result.user;
 };
 
-// 🆕 Registro
+// ðŸ†• Registro
 export const registerUser = async (
     email: string,
     password: string

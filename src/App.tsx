@@ -7,6 +7,8 @@ import { HomePage } from './pages/HomePage';
 import { EcosystemPage } from './pages/EcosystemPage';
 import { ExplorationPage } from './pages/ExplorationPage';
 import { TalentPage } from './pages/TalentPage';
+import { BenefitsPage } from './pages/BenefitsPage';
+import { VacanciesPage } from './pages/VacanciesPage';
 import { ROLES } from './data/mockData';
 import type { Role } from './types';
 
@@ -44,6 +46,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage heroImageSrc={heroImageSrc} />} />
           <Route path="/ecosistema" element={<EcosystemPage />} />
+          <Route path="/beneficios" element={<BenefitsPage />} />
           <Route
             path="/explora"
             element={
@@ -61,6 +64,7 @@ export default function App() {
               />
             }
           />
+          <Route path="/vacantes" element={<VacanciesPage />} />
           <Route path="/postula" element={<TalentPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

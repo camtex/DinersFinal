@@ -65,9 +65,10 @@ export const ExplorationPage = ({
   return (
     <>
       <PageIntro
-        eyebrow="Rutas"
+        eyebrow=""
         title="Explora rutas, habilidades e intereses por separado"
         description="Ahora esta experiencia vive como una pagina propia. El recorrido de descubrimiento, el quiz vocacional y los resultados estan aislados para que la navegacion sea mas clara y profesional."
+        imageSrc="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072"
       />
 
       <CategoriesSection />
@@ -121,5 +122,5 @@ export const ExplorationPage = ({
         )}
       </AnimatePresence>
     </>
-  );
-};
+  ); // <--- Cerramos el return
+}; // <--- Cerramos el componente ExplorationPage

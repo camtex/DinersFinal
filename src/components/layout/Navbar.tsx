@@ -7,8 +7,9 @@ type NavbarProps = {
 const navItems = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/ecosistema', label: 'Propuesta' },
+  { to: '/beneficios', label: 'Beneficios' },
   { to: '/explora', label: 'Rutas' },
-  { to: '/postula', label: 'Postula' },
+  { to: '/vacantes', label: 'Vacantes' },
 ];
 
 export const Navbar = ({ logoSrc }: NavbarProps) => {
@@ -46,6 +47,20 @@ export const Navbar = ({ logoSrc }: NavbarProps) => {
               )}
             </NavLink>
           ))}
+
+          <NavLink to="/postula">
+            {({ isActive }) => (
+              <span
+                className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all ${
+                  isActive
+                    ? 'bg-[#004C97] text-white shadow-[0_12px_26px_rgba(0,76,151,0.24)]'
+                    : 'bg-[#041E42] text-white hover:bg-[#004C97] hover:shadow-[0_12px_26px_rgba(0,76,151,0.18)]'
+                }`}
+              >
+                Iniciar
+              </span>
+            )}
+          </NavLink>
         </div>
       </div>
     </nav>

@@ -2,7 +2,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore"; // 👈 FALTABA
+import { getFirestore } from "firebase/firestore"; // ðŸ‘ˆ FALTABA
 
 const firebaseConfig = {
     apiKey: "AIzaSyDfDjnCreldizOnb-sMvVuRP4LzD5otA7w",
@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-// ✅ Servicios exportados
+// âœ… Servicios exportados
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 
