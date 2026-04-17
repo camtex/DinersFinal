@@ -23,15 +23,9 @@ export const Navbar = ({ logoSrc }: NavbarProps) => {
             alt="Logo Diners Club"
             className="h-14 w-auto object-contain"
             onError={(e) => {
-              // Fallback por si la imagen no existe en public
               e.currentTarget.style.display = 'none';
             }}
           />
-          {/*
-          <div className="flex flex-col">
-            <span className="text-lg font-black leading-none tracking-tight text-diners-twilight">Diners Club</span>
-            <span className="text-xs font-medium uppercase tracking-[0.22em] text-diners-lakefront">Peru</span>
-          </div>*/}
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">

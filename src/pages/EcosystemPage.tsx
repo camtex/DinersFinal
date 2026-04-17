@@ -2,7 +2,6 @@ import { PageIntro } from '@/components/layout/PageIntro';
 import { MentorshipSection } from '@/components/sections/MentorshipSection';
 import { CareerPathSection } from '@/components/sections/CareerPathSection';
 import { ImpactExpectedSection } from '@/components/sections/ImpactEpectedSection';
-import { LearningAndChallenges } from '@/components/sections/LearningAndChallenges';
 
 export const EcosystemPage = () => (
   <>
@@ -14,6 +13,5 @@ export const EcosystemPage = () => (
     <MentorshipSection />
     <CareerPathSection />
     <ImpactExpectedSection />
-    <LearningAndChallenges />
   </>
 );

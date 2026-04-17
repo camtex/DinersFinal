@@ -1,104 +1,201 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 import { Send, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CATEGORIES } from '../../data/mockData';
 
+import { db } from "@/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { loginWithGoogle } from "@/auth";
+
 export const TalentForm = () => {
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    area: "",
+    program: "",
+    linkedin: ""
+  });
+
+  // 🔄 manejar inputs
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
+  };
+
+  // 🔥 submit normal
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    try {
+      await addDoc(collection(db, "talent"), {
+        ...formData,
+        createdAt: new Date()
+      });
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error al guardar:", error);
+    }
+  };
+
+  // 🔐 login con Google
+  const handleGoogleLogin = async () => {
+    try {
+      const user = await loginWithGoogle();
+
+      // guardar en Firestore
+      await addDoc(collection(db, "talent"), {
+        name: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        createdAt: new Date()
+      });
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error con Google:", error);
+    }
   };
 
   return (
-    <section id="registro" className="py-32 bg-white">
-      <div className="container">
-        <div className="mx-auto flex max-w-6xl flex-col overflow-hidden rounded-[3rem] border border-diners-gray-1 bg-diners-white-sand/50 shadow-2xl lg:flex-row">
-          <div className="relative flex flex-col justify-center overflow-hidden bg-diners-twilight p-12 text-white lg:w-2/5 lg:p-16">
-            <div className="absolute top-0 right-0 h-64 w-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-diners-lakefront/10" />
-            <div className="relative z-10">
-              <h2 className="mb-8 text-4xl font-black leading-tight">Se parte de nuestro <span className="text-diners-blue-sky">Ecosistema</span></h2>
-              <p className="mb-10 text-lg font-light leading-relaxed text-diners-gray-1">
-                Registrate para recibir informacion exclusiva sobre vacantes, mentorias y eventos de Diners Club Peru.
+    <section id="registro" className="py-40 bg-white relative">
+      <div className="container mx-auto px-6">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row rounded-[4rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(4,30,66,0.15)] ring-1 ring-diners-gray-1">
+
+          {/* LEFT */}
+          <div className="lg:w-[45%] bg-diners-twilight p-14 md:p-20 text-white flex flex-col justify-center">
+            <div>
+              <h2 className="text-5xl font-black mb-6">
+                Sé parte de nuestro <span className="text-accent">Ecosistema.</span>
+              </h2>
+              <p className="text-lg text-white/60">
+                Accede a oportunidades exclusivas y networking profesional.
               </p>
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                    <CheckCircle2 className="w-5 h-5 text-diners-blue-sky" />
-                  </div>
-                  <span className="text-sm font-medium">Acceso prioritario a vacantes</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                    <CheckCircle2 className="w-5 h-5 text-diners-blue-sky" />
-                  </div>
-                  <span className="text-sm font-medium">Invitaciones a Masterclasses</span>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="bg-white p-12 lg:w-3/5 lg:p-16">
+          {/* RIGHT */}
+          <div className="lg:w-[55%] p-14 md:p-20 bg-white flex flex-col">
+
             {submitted ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex h-full flex-col items-center justify-center text-center"
+                className="h-full flex flex-col items-center justify-center text-center"
               >
-                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-diners-lakefront/10">
-                  <CheckCircle2 className="w-10 h-10 text-diners-lakefront" />
-                </div>
-                <h3 className="mb-4 text-3xl font-black text-diners-twilight">Registro Exitoso</h3>
-                <p className="max-w-md text-lg font-light text-diners-twilight-65">
-                  Gracias por tu interes. Pronto nos pondremos en contacto contigo para iniciar tu camino en Diners.
-                </p>
-                <Button variant="outline" onClick={() => setSubmitted(false)} className="mt-10 rounded-full px-8">
-                  Volver al formulario
+                <CheckCircle2 className="w-16 h-16 text-accent mb-6" />
+                <h3 className="text-3xl font-bold mb-4">¡Registro exitoso!</h3>
+
+                <Button onClick={() => setSubmitted(false)}>
+                  Volver
                 </Button>
               </motion.div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid gap-8 sm:grid-cols-2">
-                  <div className="space-y-3">
-                    <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-diners-twilight">Nombre Completo</Label>
-                    <Input id="name" placeholder="Ej. Ana Garcia" required className="h-14 rounded-xl border-diners-gray-4 focus:ring-diners-lakefront/20" />
-                  </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="email" className="text-[10px] font-black uppercase tracking-widest text-diners-twilight">Correo Electronico</Label>
-                    <Input id="email" type="email" placeholder="ana@ejemplo.com" required className="h-14 rounded-xl border-diners-gray-4 focus:ring-diners-lakefront/20" />
-                  </div>
-                </div>
-                <div className="grid gap-8 sm:grid-cols-2">
-                  <div className="space-y-3">
-                    <Label htmlFor="area" className="text-[10px] font-black uppercase tracking-widest text-diners-twilight">Area de Interes</Label>
-                    <select id="area" className="h-14 w-full rounded-xl border border-diners-gray-4 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-diners-lakefront/20">
-                      {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                    </select>
-                  </div>
-                  <div className="space-y-3">
-                    <Label htmlFor="program" className="text-[10px] font-black uppercase tracking-widest text-diners-twilight">Programa de Origen</Label>
-                    <select id="program" className="h-14 w-full rounded-xl border border-diners-gray-4 bg-white px-4 text-sm focus:outline-none focus:ring-2 focus:ring-diners-lakefront/20">
-                      <option value="none">Ninguno</option>
-                      <option value="chicastec">+ChicasTec (UNICEF)</option>
-                      <option value="oit">Programa OIT</option>
-                      <option value="other">Otro programa</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  <Label htmlFor="linkedin" className="text-[10px] font-black uppercase tracking-widest text-diners-twilight">LinkedIn (Opcional)</Label>
-                  <Input id="linkedin" placeholder="linkedin.com/in/tuperfil" className="h-14 rounded-xl border-diners-gray-4 focus:ring-diners-lakefront/20" />
-                </div>
-                <Button type="submit" className="mt-4 h-16 w-full rounded-full bg-diners-blue-sky text-lg font-black text-white shadow-xl transition-all hover:bg-diners-hover">
-                  Registrar mi Talento
-                  <Send className="ml-3 w-5 h-5" />
+
+              <div className="space-y-6">
+
+                {/* 🔐 BOTÓN GOOGLE */}
+                <Button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="w-full bg-white text-black border border-gray-300 hover:bg-gray-100 h-14 rounded-xl font-semibold flex items-center justify-center gap-3"
+                >
+                  <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    alt="Google"
+                    className="w-5 h-5"
+                  />
+                  Continuar con Google
                 </Button>
-              </form>
+
+                {/* separador */}
+                <div className="flex items-center gap-4">
+                  <div className="flex-1 h-px bg-gray-200" />
+                  <span className="text-xs text-gray-400">o</span>
+                  <div className="flex-1 h-px bg-gray-200" />
+                </div>
+
+                {/* FORM */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+
+                  <div>
+                    <Label htmlFor="name">Nombre</Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="area">Especialidad</Label>
+                    <select
+                      id="area"
+                      value={formData.area}
+                      onChange={handleChange}
+                      className="w-full border p-3 rounded-lg"
+                    >
+                      <option value="">Seleccionar</option>
+                      {CATEGORIES.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="program">Programa</Label>
+                    <select
+                      id="program"
+                      value={formData.program}
+                      onChange={handleChange}
+                      className="w-full border p-3 rounded-lg"
+                    >
+                      <option value="">Seleccionar</option>
+                      <option value="chicastec">+ChicasTec</option>
+                      <option value="oit">OIT</option>
+                      <option value="other">Referido</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="linkedin">LinkedIn</Label>
+                    <Input
+                      id="linkedin"
+                      value={formData.linkedin}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    Confirmar Registro
+                    <Send className="ml-2 w-4 h-4" />
+                  </Button>
+
+                </form>
+              </div>
             )}
+
           </div>
         </div>
       </div>
