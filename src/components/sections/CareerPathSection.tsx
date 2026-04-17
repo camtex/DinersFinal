@@ -49,7 +49,7 @@ export const CareerPathSection = () => {
 
   return (
     <section className="py-24 bg-white overflow-hidden">
-      <div className="container">
+      <div className="container px-6 mx-auto">
 
         {/* Encabezado */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
@@ -61,12 +61,20 @@ export const CareerPathSection = () => {
               Línea de <span className="text-diners-lakefront">Carrera</span>
             </h2>
           </div>
+
+          {/* Botones con los colores solicitados */}
           <div className="flex gap-3">
-            <button onClick={prevStep} className="p-3 rounded-full border border-diners-gray-1 hover:bg-diners-twilight hover:text-white transition-all">
-              <ChevronLeft size={20} />
+            <button
+              onClick={prevStep}
+              className="p-3 rounded-full bg-white text-[#00A3E0] transition-all duration-300 hover:bg-[#006C73] shadow-lg active:scale-95"
+            >
+              <ChevronLeft size={22} />
             </button>
-            <button onClick={nextStep} className="p-3 rounded-full bg-diners-twilight text-white hover:bg-diners-lakefront transition-all shadow-lg">
-              <ChevronRight size={20} />
+            <button
+              onClick={nextStep}
+              className="p-3 rounded-full bg-[#00A3E0] text-white transition-all duration-300 hover:bg-[#006C73] shadow-lg active:scale-95"
+            >
+              <ChevronRight size={22} />
             </button>
           </div>
         </div>
@@ -82,67 +90,89 @@ export const CareerPathSection = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
                 className="space-y-6"
               >
                 <div className="flex items-center gap-3 text-diners-lakefront">
                   <Briefcase size={18} />
-                  <span className="font-bold text-sm uppercase tracking-widest">{careerData[activeStep].level}</span>
+                  <span className="font-bold text-sm uppercase tracking-widest">
+                    {careerData[activeStep].level}
+                  </span>
                 </div>
 
-                <h3 className="text-2xl md:text-3xl font-black text-diners-twilight leading-tight">
+                <h3 className="text-2xl md:text-4xl font-black text-diners-twilight leading-[1.1]">
                   {careerData[activeStep].roles.map((role, idx) => (
                     <span key={idx} className="block">{role}</span>
                   ))}
                 </h3>
 
-                <p className="text-lg font-light text-diners-twilight-65 leading-relaxed">
+                <p className="text-lg font-light text-diners-twilight-65 leading-relaxed max-w-md">
                   {careerData[activeStep].desc}
                 </p>
 
-                {/* Indicadores de progreso */}
-                <div className="flex gap-2 pt-6">
+                {/* Indicadores de progreso horizontales con animación expandible */}
+                <div className="flex items-center gap-2 pt-8">
                   {careerData.map((_, i) => (
                     <div
                       key={i}
-                      className={`h-1 transition-all duration-500 rounded-full ${i === activeStep ? 'w-12 bg-diners-lakefront' : 'w-4 bg-diners-gray-1'}`}
-                    />
+                      onClick={() => setActiveStep(i)}
+                      className="relative h-1.5 cursor-pointer"
+                    >
+                      {/* Fondo de la barra */}
+                      <div className="absolute inset-0 w-full h-full bg-slate-100 rounded-full" />
+
+                      {/* Barra activa con Framer Motion */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          width: i === activeStep ? 48 : 16,
+                          backgroundColor: i === activeStep ? "#00A3E0" : "#E2E8F0"
+                        }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="relative h-full rounded-full"
+                      />
+                    </div>
                   ))}
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
 
-          {/* Lado Derecho: Imagen con máscara Diners */}
+          {/* Lado Derecho: Imagen */}
           <div className="lg:col-span-7 relative">
-            <div className="absolute -inset-4 bg-diners-blue-sky/5 rounded-[3rem] blur-3xl" />
+            <div className="absolute -inset-4 bg-[#00A3E0]/5 rounded-[3rem] blur-3xl" />
 
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeStep}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.1 }}
-                transition={{ duration: 0.6, ease: "circOut" }}
-                className="relative aspect-[16/10] md:aspect-[16/9] overflow-hidden rounded-[2.5rem] shadow-2xl border-4 border-white"
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="relative aspect-[16/10] md:aspect-[16/9] overflow-hidden rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-4 border-white"
               >
                 <img
                   src={careerData[activeStep].image}
                   alt="Carrera Diners"
                   className="w-full h-full object-cover"
                 />
-                {/* Overlay gradiente */}
-                <div className="absolute inset-0 bg-gradient-to-t from-diners-twilight/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-diners-twilight/30 to-transparent" />
               </motion.div>
             </AnimatePresence>
 
-            {/* Tarjeta flotante de "Siguiente" (Preview) */}
-            <div className="absolute -bottom-6 -right-6 hidden md:block w-48 p-4 bg-white shadow-xl rounded-2xl border border-diners-gray-1 transform rotate-3">
-              <p className="text-[8px] font-black uppercase text-diners-lakefront mb-1">Próximo paso</p>
-              <p className="text-[10px] font-bold text-diners-twilight truncate">
+            {/* Tarjeta flotante de "Próximo paso" */}
+            <motion.div
+              key={`next-${activeStep}`}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="absolute -bottom-6 -right-6 hidden md:block w-52 p-5 bg-white shadow-2xl rounded-2xl border border-slate-50 transform rotate-2"
+            >
+              <p className="text-[9px] font-black uppercase text-[#00A3E0] mb-1.5 tracking-tighter">Siguiente Nivel</p>
+              <p className="text-xs font-bold text-diners-twilight leading-tight">
                 {careerData[(activeStep + 1) % careerData.length].roles[0]}
               </p>
-            </div>
+            </motion.div>
           </div>
 
         </div>

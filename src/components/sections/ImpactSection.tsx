@@ -40,11 +40,12 @@ export const ImpactSection = () => {
                   className="stroke-white/10"
                   strokeWidth="10"
                 />
+
                 {/* Círculo animado (progreso azul) */}
                 <motion.circle
                   cx="60" cy="60" r={radius}
                   fill="none"
-                  className="stroke-diners-blue-sky"
+                  stroke="#00A3E0"
                   strokeWidth="10"
                   strokeLinecap="round"
                   initial={{ strokeDashoffset: circumference }}
@@ -53,10 +54,15 @@ export const ImpactSection = () => {
                   style={{ strokeDasharray: circumference }}
                 />
               </svg>
-              {/* Texto central dentro del SVG */}
+
+              {/* Texto central */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-black tracking-tighter text-diners-blue-sky">3/10</span>
-                <span className="text-[9px] font-black uppercase tracking-wider text-white/60">STEAM Perú</span>
+                <span className="text-4xl font-black tracking-tighter text-[#00A3E0]">
+                  3/10
+                </span>
+                <span className="text-[9px] font-black uppercase tracking-wider text-white/60">
+                  STEAM Perú
+                </span>
               </div>
             </div>
 
@@ -100,7 +106,7 @@ export const ImpactSection = () => {
                 La pérdida de talento femenino frena la innovación corporativa. Necesitamos tu visión.
               </p>
             </div>
-            <button className="w-full bg-diners-twilight hover:bg-diners-lakefront text-white px-6 py-3 rounded-full font-bold text-xs transition-colors shadow-md">
+            <button className="w-full bg-[#00A3E0] hover:bg-[#006C73] text-white px-6 py-3 rounded-full font-bold text-xs transition-colors shadow-md">
               Únete a ELLAS DIGITAL
             </button>
           </motion.div>

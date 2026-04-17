@@ -118,15 +118,13 @@ export const TestimonialsSection = () => {
           <div className="absolute -bottom-6 right-10 flex gap-3">
             <button
               onClick={prev}
-              className="bg-white border border-diners-gray-1 text-diners-twilight shadow-xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-diners-twilight hover:text-white transition-all"
-            >
+              className="bg-white border border-diners-gray-1 text-[#00A3E0] shadow-xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-[#00A3E0] hover:text-white transition-all"            >
               <ChevronLeft size={20} />
             </button>
 
             <button
               onClick={next}
-              className="bg-diners-twilight text-white shadow-xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-diners-lakefront transition-all"
-            >
+              className="bg-[#00A3E0] border border-diners-gray-1 text-white shadow-xl w-12 h-12 rounded-full flex items-center justify-center hover:bg-[#00A3E0] hover:text-white transition-all"            >
               <ChevronRight size={20} />
             </button>
           </div>
@@ -137,7 +135,9 @@ export const TestimonialsSection = () => {
               <button
                 key={i}
                 onClick={() => setIndex(i)}
-                className={`w-1 transition-all duration-300 rounded-full ${i === index ? "h-12 bg-diners-lakefront" : "h-4 bg-diners-gray-1/40 hover:bg-diners-gray-1"
+                className={`w-1 transition-all duration-300 rounded-full ${i === index
+                  ? "h-12 bg-[#00A3E0]"
+                  : "h-4 bg-diners-gray-1/40 hover:bg-[#006C73]"
                   }`}
               />
             ))}
