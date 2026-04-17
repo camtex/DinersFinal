@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { GraduationCap, HeartPulse, Home, Sparkles, Wallet, CheckCircle2, ArrowRight } from 'lucide-react';
+import { GraduationCap, HeartPulse, Home, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const benefits = [

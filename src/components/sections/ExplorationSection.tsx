@@ -49,6 +49,7 @@ export const ExplorationSection = ({
           <div className="mt-12 flex justify-center gap-6">
             <button
               onClick={() => setMode('quiz')}
+              type="button"
               className={`rounded-full px-8 py-3 text-sm font-bold transition-all ${
                 mode === 'quiz'
                   ? 'bg-diners-blue-sky text-white shadow-lg'
@@ -60,6 +61,7 @@ export const ExplorationSection = ({
 
             <button
               onClick={() => setMode('manual')}
+              type="button"
               className={`rounded-full px-8 py-3 text-sm font-bold transition-all ${
                 mode === 'manual'
                   ? 'bg-diners-blue-sky text-white shadow-lg'

@@ -12,15 +12,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", size = "default", asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
 
-    const baseStyles = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition duration-300 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20 disabled:pointer-events-none disabled:opacity-50 motion-safe:hover:-translate-y-0.5 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+    const baseStyles = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition duration-300 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20 disabled:pointer-events-none disabled:opacity-50 motion-safe:hover:-translate-y-0.5 font-sans [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
 
     const variants = {
       default: "bg-diners-blue-sky text-white shadow-[0_14px_30px_rgba(0,163,224,0.22)] hover:bg-diners-hover hover:shadow-[0_18px_36px_rgba(0,108,115,0.28)]",
       destructive: "bg-diners-blue-sky text-white shadow-[0_14px_30px_rgba(0,163,224,0.22)] hover:bg-diners-hover",
-      outline: "border border-diners-gray-4 bg-background shadow-sm hover:border-diners-hover hover:bg-diners-blue-sky/8 hover:text-diners-hover",
-      secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-diners-hover",
-      ghost: "hover:bg-diners-blue-sky/10 hover:text-diners-hover",
-      link: "text-primary underline-offset-4 hover:underline",
+      outline: "border border-diners-blue-sky bg-white text-diners-blue-sky shadow-sm hover:border-diners-hover hover:bg-diners-hover hover:text-white",
+      secondary: "bg-diners-blue-sky text-white shadow-[0_14px_30px_rgba(0,163,224,0.18)] hover:bg-diners-hover",
+      ghost: "text-diners-blue-sky hover:bg-diners-blue-sky/10 hover:text-diners-hover",
+      link: "text-diners-blue-sky underline-offset-4 hover:text-diners-hover hover:underline",
     }
 
     const sizes = {

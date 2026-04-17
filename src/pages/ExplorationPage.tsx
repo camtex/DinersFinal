@@ -5,6 +5,7 @@ import { CategoriesSection } from '@/components/sections/CategoriesSection';
 import { ExplorationSection } from '@/components/sections/ExplorationSection';
 import { ResultsSection } from '@/components/sections/ResultsSection';
 import type { Role } from '@/types';
+import { saveStoredQuizTraits } from '@/lib/dashboardStorage';
 
 type ExplorationPageProps = {
   selectedSkills: string[];
@@ -85,6 +86,7 @@ export const ExplorationPage = ({
           }, 100);
         }}
         onQuizComplete={(traits: string[]) => {
+          saveStoredQuizTraits(traits);
           const selectedMappings = traits
             .map(trait => quizMappings[trait])
             .filter(Boolean);

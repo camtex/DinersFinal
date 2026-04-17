@@ -7,7 +7,7 @@ import {
   Globe,
   Zap
 } from 'lucide-react';
-import type { Role, Category, QuizQuestion, LearningPath, Challenge } from '../types'
+import type { Role, Category, QuizQuestion, LearningPath, Challenge, Vacancy } from '../types'
 
 export const CATEGORIES: Category[] = [
   {
@@ -101,6 +101,54 @@ export const ROLES: Role[] = [
 
 export const ALL_SKILLS = Array.from(new Set(ROLES.flatMap(r => r.skills))).sort();
 export const ALL_INTERESTS = Array.from(new Set(ROLES.flatMap(r => r.interests))).sort();
+
+export const VACANCIES: Vacancy[] = [
+  {
+    id: 'vac-dev',
+    title: 'Practicante de Desarrollo',
+    type: 'Hibrido',
+    area: 'Ingenieria Digital',
+    description: 'Ideal para perfiles que quieren aprender en proyectos reales con acompanamiento tecnico cercano.',
+  },
+  {
+    id: 'vac-data',
+    title: 'Analista de Datos',
+    type: 'Tiempo completo',
+    area: 'Data & Analytics',
+    description: 'Rol orientado a transformacion de datos, visualizacion y soporte a decisiones clave del negocio.',
+  },
+  {
+    id: 'vac-cyber',
+    title: 'Especialista de Seguridad',
+    type: 'Tiempo completo',
+    area: 'Ciberseguridad',
+    description: 'Posicion para fortalecer controles, monitoreo y evolucion de practicas de seguridad corporativa.',
+  },
+  {
+    id: 'vac-ux',
+    title: 'Practicante UX/UI',
+    type: 'Remoto flexible',
+    area: 'Diseno de Producto',
+    description: 'Vacante para apoyar en investigacion, prototipado y mejoras de experiencia digital.',
+  },
+  {
+    id: 'vac-ops',
+    title: 'Analista de Operaciones Digitales',
+    type: 'Tiempo completo',
+    area: 'Operaciones',
+    description: 'Rol enfocado en continuidad operativa, seguimiento de indicadores y mejora de procesos.',
+  },
+];
+
+export const TRAIT_LABELS: Record<string, string> = {
+  tech: 'Innovacion y tecnologia',
+  finance: 'Analisis y estrategia',
+  design: 'Experiencia y producto',
+  cyber: 'Seguridad y control',
+  ops: 'Operacion y ejecucion',
+  commercial: 'Conexion y negocio',
+  talent: 'Acompanamiento y talento',
+};
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {

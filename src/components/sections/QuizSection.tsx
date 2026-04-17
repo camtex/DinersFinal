@@ -53,83 +53,55 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
   };
 
   return (
-    <Card className="mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-diners-gray-1 bg-white shadow-[0_20px_60px_rgba(0,76,151,0.08)]">
-      <CardHeader className="border-b border-diners-gray-1/70 bg-[linear-gradient(180deg,rgba(0,163,224,0.08)_0%,rgba(255,255,255,0.96)_100%)] p-8">
-        <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <Card className="mx-auto max-w-3xl overflow-hidden rounded-[2rem] border border-diners-gray-1/80 bg-white shadow-[0_18px_45px_rgba(0,76,151,0.08)]">
+      <CardHeader className="space-y-5 border-b border-diners-gray-1/70 bg-[linear-gradient(180deg,rgba(0,163,224,0.06)_0%,rgba(255,255,255,1)_100%)] p-6 md:p-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 rounded-full bg-diners-blue-sky/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-diners-blue-sky">
               <Sparkles className="h-3.5 w-3.5" />
               Quiz Vocacional
             </div>
             <div>
-              <p className="mb-2 text-[11px] font-black uppercase tracking-[0.22em] text-diners-tidepool">
-                {question.category}
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-diners-tidepool">
+                {question.category} · Paso {currentStep + 1} de {QUIZ_QUESTIONS.length}
               </p>
-              <CardTitle className="max-w-3xl text-2xl font-black leading-tight text-diners-twilight md:text-3xl">
+              <CardTitle className="max-w-2xl text-2xl font-bold leading-tight text-diners-twilight md:text-[2rem]">
                 {question.question}
               </CardTitle>
             </div>
-            {question.helper && (
-              <p className="max-w-2xl text-sm font-light leading-relaxed text-diners-twilight-65">
-                {question.helper}
-              </p>
-            )}
+            <p className="max-w-2xl text-sm leading-relaxed text-diners-twilight-65">
+              {question.helper || 'Elige la opción que más se parezca a ti. No hay respuestas correctas o incorrectas.'}
+            </p>
           </div>
 
-          <div className="min-w-[190px] rounded-[1.75rem] border border-diners-gray-1 bg-white/90 p-4 shadow-sm">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-diners-twilight-65">
-              Avance
+          <div className="min-w-[170px] rounded-[1.5rem] border border-diners-gray-1/80 bg-white/90 px-4 py-3 shadow-sm">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-diners-twilight-65">
+              Progreso
             </p>
-            <p className="mt-2 text-2xl font-black text-diners-twilight">
-              {currentStep + 1}
-              <span className="ml-1 text-sm font-medium text-diners-twilight-65">/ {QUIZ_QUESTIONS.length}</span>
+            <p className="mt-2 text-xl font-bold text-diners-twilight">
+              {Math.round(progress)}%
             </p>
-            <p className="mt-1 text-xs font-medium text-diners-tidepool">
-              {answeredCount} respuestas registradas
+            <p className="mt-1 text-xs text-diners-twilight-65">
+              {answeredCount} respuestas guardadas
             </p>
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="h-2.5 overflow-hidden rounded-full bg-diners-gray-1/70">
+        <div className="space-y-2">
+          <div className="h-2 overflow-hidden rounded-full bg-diners-gray-1/70">
             <div
               className="h-full rounded-full bg-[linear-gradient(90deg,#00A3E0_0%,#006C73_100%)] transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
-
-          <div className="grid grid-cols-4 gap-2 md:grid-cols-8">
-            {QUIZ_QUESTIONS.map((item, index) => {
-              const isActive = index === currentStep;
-              const isDone = answers[index] !== -1;
-
-              return (
-                <div key={item.id} className="flex items-center gap-2">
-                  <div
-                    className={`flex h-9 w-9 items-center justify-center rounded-full border text-[11px] font-black transition-all ${
-                      isActive
-                        ? 'border-diners-blue-sky bg-diners-blue-sky text-white shadow-md'
-                        : isDone
-                          ? 'border-diners-hover bg-diners-hover text-white'
-                          : 'border-diners-gray-1 bg-white text-diners-twilight-65'
-                    }`}
-                  >
-                    {index + 1}
-                  </div>
-                  <span className={`hidden text-[10px] font-bold uppercase tracking-[0.18em] md:inline ${
-                    isActive ? 'text-diners-blue-sky' : 'text-diners-twilight-65'
-                  }`}>
-                    Paso
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          <p className="text-xs text-diners-twilight-65">
+            Responde con calma. El resultado se adapta según tus elecciones.
+          </p>
         </div>
       </CardHeader>
 
-      <CardContent className="p-8">
-        <div className="grid gap-4">
+      <CardContent className="p-6 md:p-8">
+        <div className="grid gap-3">
           {question.options.map((option, index) => {
             const isSelected = selectedOption === index;
 
@@ -138,14 +110,14 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
                 key={`${question.id}-${index}`}
                 type="button"
                 onClick={() => handleSelect(index)}
-                className={`group flex w-full items-start gap-4 rounded-[1.75rem] border px-5 py-5 text-left transition-all ${
+                className={`group flex w-full items-start gap-4 rounded-[1.5rem] border px-4 py-4 text-left transition-all ${
                   isSelected
-                    ? 'border-diners-blue-sky bg-diners-blue-sky/8 shadow-[0_12px_30px_rgba(0,163,224,0.14)]'
-                    : 'border-diners-gray-1 bg-white hover:border-diners-blue-sky/55 hover:bg-diners-white-sand'
+                    ? 'border-diners-blue-sky bg-diners-blue-sky/6 shadow-[0_10px_24px_rgba(0,163,224,0.12)]'
+                    : 'border-diners-gray-1/80 bg-white hover:border-diners-blue-sky/45 hover:bg-diners-white-sand'
                 }`}
               >
                 <div
-                  className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border text-sm font-black transition-all ${
+                  className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border text-sm font-bold transition-all ${
                     isSelected
                       ? 'border-diners-blue-sky bg-diners-blue-sky text-white'
                       : 'border-diners-gray-1 bg-diners-white-sand text-diners-twilight-65 group-hover:border-diners-blue-sky/45'
@@ -156,7 +128,7 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
 
                 <div className="min-w-0 flex-1">
                   <div className="mb-2 flex flex-wrap items-center gap-3">
-                    <span className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] ${
+                    <span className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] ${
                       isSelected
                         ? 'bg-white text-diners-blue-sky'
                         : 'bg-diners-blue-sky/8 text-diners-blue-sky'
@@ -164,8 +136,8 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
                       {option.tag}
                     </span>
                   </div>
-                  <p className={`text-sm leading-relaxed md:text-base ${
-                    isSelected ? 'font-semibold text-diners-twilight' : 'font-medium text-diners-twilight-65'
+                  <p className={`text-sm leading-relaxed md:text-[15px] ${
+                    isSelected ? 'font-medium text-diners-twilight' : 'text-diners-twilight-65'
                   }`}>
                     {option.text}
                   </p>
@@ -175,13 +147,13 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
           })}
         </div>
 
-        <div className="mt-8 flex flex-col gap-4 border-t border-diners-gray-1/70 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-t border-diners-gray-1/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <Button
             type="button"
             variant="outline"
             onClick={() => setCurrentStep(prev => Math.max(prev - 1, 0))}
             disabled={currentStep === 0}
-            className="h-12 rounded-full px-6"
+            className="h-11 px-6"
           >
             <ChevronLeft className="h-4 w-4" />
             Anterior
@@ -191,7 +163,7 @@ export const QuizSection = ({ onComplete }: { onComplete: (traits: string[]) => 
             type="button"
             onClick={handleNext}
             disabled={selectedOption === -1}
-            className="h-12 rounded-full px-8"
+            className="h-11 px-8"
           >
             {currentStep === QUIZ_QUESTIONS.length - 1 ? 'Ver resultado' : 'Continuar'}
             <ChevronRight className="h-4 w-4" />

@@ -1,22 +1,55 @@
-
-import { Badge } from '@/components/ui/badge';
+import { Target, Zap, TrendingUp, Award } from 'lucide-react'; // Iconos para dar peso visual
 
 export const ImpactExpectedSection = () => (
-  <section className="py-20 bg-diners-twilight text-white">
-    <div className="container">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl font-black mb-12">Nuestro Impacto Esperado</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+  <section className="py-24 bg-diners-twilight text-white relative overflow-hidden">
+    {/* Decoración sutil de fondo */}
+    <div className="absolute top-0 right-0 w-96 h-96 bg-diners-blue-sky/5 blur-[120px] rounded-full" />
+
+    <div className="container relative z-10">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-black italic">Tu evolución con nosotros.</h2>
+          <p className="mt-4 text-white/50 font-light max-w-xl mx-auto">
+            No solo buscamos talento, diseñamos el entorno para que alcances tu máximo potencial dentro de la corporación.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { title: "Participación", desc: "Incremento femenino en tecnología", source: "UNICEF / UNESCO" },
-            { title: "Habilidades", desc: "Desarrollo de competencias digitales", source: "WEF" },
-            { title: "Empleabilidad", desc: "Mejora en inserción laboral juvenil", source: "OIT" },
-            { title: "Equidad", desc: "Reducción de brechas de género", source: "UNICEF" }
+            {
+              title: "Scoring Real",
+              desc: "Tu perfil es evaluado con algoritmos de precisión para match directo.",
+              icon: <Target className="w-5 h-5" />,
+              tag: "Data Driven"
+            },
+            {
+              title: "Rutas Ágiles",
+              desc: "Procesos de selección optimizados: menos burocracia, más talento.",
+              icon: <Zap className="w-5 h-5" />,
+              tag: "Efficiency"
+            },
+            {
+              title: "Upskilling",
+              desc: "Acceso a rutas de aprendizaje basadas en las vacantes del mañana.",
+              icon: <TrendingUp className="w-5 h-5" />,
+              tag: "Growth"
+            },
+            {
+              title: "Certificación",
+              desc: "Validamos tus competencias bajo estándares de Diners Club.",
+              icon: <Award className="w-5 h-5" />,
+              tag: "Elite"
+            }
           ].map((item, i) => (
-            <div key={i} className="p-6 rounded-2xl bg-white/5 border border-white/10">
-              <h4 className="font-bold text-diners-blue-sky mb-2">{item.title}</h4>
-              <p className="text-xs font-light text-diners-gray-1 mb-4">{item.desc}</p>
-              <Badge variant="outline" className="text-[10px] font-medium border-white/20 text-white/60">{item.source}</Badge>
+            <div key={i} className="group p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-diners-blue-sky/30 transition-all duration-500">
+              <div className="w-12 h-12 rounded-2xl bg-diners-blue-sky/10 flex items-center justify-center text-diners-blue-sky mb-6 group-hover:scale-110 transition-transform">
+                {item.icon}
+              </div>
+              <h4 className="font-bold text-lg mb-3">{item.title}</h4>
+              <p className="text-sm font-light text-white/50 leading-relaxed mb-6">{item.desc}</p>
+              <span className="text-[10px] font-black uppercase tracking-widest text-diners-blue-sky/60">
+                {item.tag}
+              </span>
             </div>
           ))}
         </div>

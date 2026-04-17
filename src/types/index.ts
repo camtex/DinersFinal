@@ -43,3 +43,39 @@ export interface Challenge {
   difficulty: string;
   points: number;
 }
+
+export interface Vacancy {
+  id: string;
+  title: string;
+  type: string;
+  area: string;
+  description: string;
+}
+
+export interface UserProfile {
+  uid?: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  email: string;
+  lastAccessMode?: "login" | "register";
+}
+
+export interface VacancyApplication {
+  id: string;
+  vacancyId: string;
+  vacancyTitle: string;
+  area: string;
+  appliedAt: string;
+  fullName: string;
+  linkedinUrl: string;
+  cvFileName: string;
+}
+
+export interface PendingVacancyApplication {
+  vacancyId: string;
+  vacancyTitle: string;
+  area: string;
+  type: string;
+  description: string;
+}

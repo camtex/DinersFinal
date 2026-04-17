@@ -9,8 +9,19 @@ import { ExplorationPage } from './pages/ExplorationPage';
 import { TalentPage } from './pages/TalentPage';
 import { BenefitsPage } from './pages/BenefitsPage';
 import { VacanciesPage } from './pages/VacanciesPage';
+import { DashboardPage } from './pages/DashboardPage';
 import { ROLES } from './data/mockData';
+import { isUserRegistered, setPostLoginRedirect } from './lib/dashboardStorage';
 import type { Role } from './types';
+
+const ProtectedDashboardRoute = () => {
+  if (isUserRegistered()) {
+    return <DashboardPage />;
+  }
+
+  setPostLoginRedirect('/dashboard');
+  return <Navigate to="/postula" replace />;
+};
 
 export default function App() {
   const brandLogoSrc = '';
@@ -65,6 +76,7 @@ export default function App() {
             }
           />
           <Route path="/vacantes" element={<VacanciesPage />} />
+          <Route path="/dashboard" element={<ProtectedDashboardRoute />} />
           <Route path="/postula" element={<TalentPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

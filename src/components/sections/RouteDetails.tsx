@@ -1,10 +1,32 @@
 import { motion } from 'framer-motion'
 import { X, CheckCircle2, Info } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import type { Role } from '@/types'
+import {
+  isUserRegistered,
+  savePendingVacancyApplication,
+  setPostLoginRedirect,
+} from '@/lib/dashboardStorage'
 
-export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => void }) => (
+export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => void }) => {
+  const navigate = useNavigate();
+
+  const handleApply = () => {
+    savePendingVacancyApplication({
+      vacancyId: `role-${role.id}`,
+      vacancyTitle: role.title,
+      area: 'Ruta recomendada',
+      type: 'Proceso guiado',
+      description: role.description,
+    });
+    setPostLoginRedirect('/dashboard');
+    onClose();
+    navigate(isUserRegistered() ? '/dashboard' : '/postula');
+  };
+
+  return (
   <motion.div
     initial={{ opacity: 0, scale: 0.95 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -62,7 +84,10 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
                   </li>
                 ))}
               </ul>
-              <Button className="relative z-10 h-14 w-full rounded-full bg-diners-blue-sky text-sm font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-diners-hover">
+              <Button
+                className="relative z-10 h-14 w-full rounded-full bg-diners-blue-sky text-sm font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-diners-hover"
+                onClick={handleApply}
+              >
                 Postular Ahora
               </Button>
             </div>
@@ -81,4 +106,5 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
       </div>
     </motion.div>
   </motion.div>
-);
+  );
+};

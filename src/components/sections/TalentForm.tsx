@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
-  ArrowRight,
   CheckCircle2,
   LoaderCircle,
-  LogIn,
-  UserPlus,
   Eye,
   EyeOff
 } from "lucide-react";
@@ -20,8 +18,8 @@ import {
   getPendingProfile,
   hasEmailLink,
   sendAccessLink,
-  type PendingProfile,
 } from "@/auth";
+import { consumePostLoginRedirect, saveStoredUserProfile } from "@/lib/dashboardStorage";
 
 type AccessMode = "login" | "register";
 
@@ -48,6 +46,7 @@ const modeCopy: Record<AccessMode, { title: string; description: string; success
 };
 
 export const TalentForm = () => {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<AccessMode>("register");
   const [formData, setFormData] = useState(initialForm);
   const [showPassword, setShowPassword] = useState(false);
@@ -56,6 +55,10 @@ export const TalentForm = () => {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompletingAccess, setIsCompletingAccess] = useState(true);
+
+  const navigateAfterAccess = () => {
+    navigate(consumePostLoginRedirect() || "/dashboard");
+  };
 
   // Limpiar errores automáticamente
   useEffect(() => {
@@ -190,15 +193,15 @@ export const TalentForm = () => {
                 <CheckCircle2 className="h-16 w-16 text-diners-lakefront mx-auto mb-6" />
                 <h3 className="text-3xl font-black text-diners-twilight">Acceso confirmado</h3>
                 <p className="mt-4 text-slate-500 font-light">{statusMessage || modeCopy[mode].success}</p>
-                <Button onClick={() => setSubmitted(false)} className="mt-8 rounded-full px-10 bg-diners-twilight">Continuar</Button>
+                <Button onClick={navigateAfterAccess} className="mt-8 rounded-full px-10">Ir a mi perfil</Button>
               </motion.div>
             ) : (
               <div className="max-w-xl mx-auto">
                 <div className="rounded-2xl bg-slate-100 p-1.5 flex gap-1 mb-10">
-                  <button onClick={() => setMode("register")} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${mode === "register" ? "bg-white shadow-sm text-diners-twilight" : "text-slate-400"}`}>
+                  <button type="button" onClick={() => setMode("register")} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${mode === "register" ? "bg-white shadow-sm text-diners-twilight" : "text-slate-400"}`}>
                     Registrarte
                   </button>
-                  <button onClick={() => setMode("login")} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${mode === "login" ? "bg-white shadow-sm text-diners-twilight" : "text-slate-400"}`}>
+                  <button type="button" onClick={() => setMode("login")} className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${mode === "login" ? "bg-white shadow-sm text-diners-twilight" : "text-slate-400"}`}>
                     Iniciar Sesión
                   </button>
                 </div>
@@ -254,6 +257,7 @@ export const TalentForm = () => {
 
                   {/* BOTÓN GOOGLE FUNCIONAL */}
                   <button
+                    type="button"
                     onClick={handleGoogleSignIn}
                     disabled={isSubmitting}
                     className="w-full h-12 flex items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all mb-8 shadow-sm group active:scale-[0.98] disabled:opacity-50"
@@ -277,6 +281,15 @@ export const TalentForm = () => {
 };
 
 const saveUserProfile = async ({ uid, email, firstName, lastName, mode }: { uid: string; email: string; firstName: string; lastName: string; mode: AccessMode; }) => {
+  saveStoredUserProfile({
+    uid,
+    firstName,
+    lastName,
+    fullName: `${firstName} ${lastName}`.trim(),
+    email,
+    lastAccessMode: mode,
+  });
+
   await setDoc(doc(db, "users", uid), {
     firstName, lastName,
     fullName: `${firstName} ${lastName}`.trim(),

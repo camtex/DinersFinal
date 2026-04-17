@@ -1,29 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { CareerPathSection } from '@/components/sections/CareerPathSection';
+import { Button } from '@/components/ui/button';
+import { VACANCIES } from '@/data/mockData';
+import {
+  isUserRegistered,
+  savePendingVacancyApplication,
+  setPostLoginRedirect,
+} from '@/lib/dashboardStorage';
 
-const openings = [
-  {
-    title: 'Practicante de Desarrollo',
-    type: 'Hibrido',
-    area: 'Ingenieria Digital',
-    description: 'Ideal para perfiles que quieren aprender en proyectos reales con acompanamiento tecnico cercano.',
-  },
-  {
-    title: 'Analista de Datos',
-    type: 'Tiempo completo',
-    area: 'Data & Analytics',
-    description: 'Rol orientado a transformacion de datos, visualizacion y soporte a decisiones clave del negocio.',
-  },
-  {
-    title: 'Especialista de Seguridad',
-    type: 'Tiempo completo',
-    area: 'Ciberseguridad',
-    description: 'Posicion para fortalecer controles, monitoreo y evolucion de practicas de seguridad corporativa.',
-  },
-];
+export const VacanciesPage = () => {
+  const navigate = useNavigate();
 
-export const VacanciesPage = () => (
+  const handleApply = (vacancyId: string) => {
+    const selectedVacancy = VACANCIES.find(vacancy => vacancy.id === vacancyId);
+    if (!selectedVacancy) return;
+
+    savePendingVacancyApplication(selectedVacancy);
+    setPostLoginRedirect('/dashboard');
+    navigate(isUserRegistered() ? '/dashboard' : '/postula');
+  };
+
+  return (
   <>
     <PageIntro
       variant="diners-blue"
@@ -55,9 +53,9 @@ export const VacanciesPage = () => (
         </div>
 
         <div className="grid gap-5 lg:grid-cols-3">
-          {openings.map(opening => (
+          {VACANCIES.map(opening => (
             <article
-              key={opening.title}
+              key={opening.id}
               className="rounded-[2rem] border border-diners-gray-1/70 bg-diners-white-sand p-7 shadow-[0_16px_34px_rgba(4,30,66,0.05)]"
             >
               <div className="mb-5 flex flex-wrap gap-2">
@@ -76,16 +74,19 @@ export const VacanciesPage = () => (
                 {opening.description}
               </p>
 
-              <Link
-                to="/postula"
-                className="inline-flex items-center text-[11px] font-black uppercase tracking-[0.2em] text-diners-lakefront transition-colors hover:text-diners-hover"
+              <Button
+                type="button"
+                variant="link"
+                className="h-auto px-0 py-0 text-[11px] font-black uppercase tracking-[0.2em]"
+                onClick={() => handleApply(opening.id)}
               >
                 Iniciar postulacion
-              </Link>
+              </Button>
             </article>
           ))}
         </div>
       </div>
     </section>
   </>
-);
+  );
+};

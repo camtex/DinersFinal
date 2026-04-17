@@ -154,6 +154,18 @@
 }
 
 @layer base {
+  html {
+    font-family: 'Gotham', sans-serif;
+  }
+
+  body,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+
   .container {
     margin-inline: auto;
     width: 100%;
@@ -181,9 +193,5 @@
 
   body {
     @apply bg-background text-foreground;
-  }
-
-  html {
-    @apply font-sans;
   }
 }
