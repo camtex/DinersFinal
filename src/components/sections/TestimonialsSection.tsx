@@ -57,7 +57,7 @@ export const TestimonialsSection = () => {
           <span className="text-diners-lakefront text-[10px] font-black uppercase tracking-[0.3em] block mb-3x">
             Voces que Inspiran
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-diners-twilight tracking-tight text-center">
+          <h2 className="text-4xl md:text-5xl font-black text-diners-twilight tracking-tight">
             Historias de <span className="text-diners-lakefront">Impacto</span>
           </h2>
         </div>

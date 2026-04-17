@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Laptop, TrendingDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const ImpactSection = () => {
   // Configuración del gráfico circular animado (SVG)
@@ -106,9 +107,9 @@ export const ImpactSection = () => {
                 La pérdida de talento femenino frena la innovación corporativa. Necesitamos tu visión.
               </p>
             </div>
-            <button className="w-full bg-[#00A3E0] hover:bg-[#006C73] text-white px-6 py-3 rounded-full font-bold text-xs transition-colors shadow-md">
+            <Link to="/postula" className=" text-center w-full bg-[#00A3E0] hover:bg-[#006C73] text-white px-6 py-3 rounded-full font-bold text-xs transition-colors shadow-md">
               Únete a ELLAS DIGITAL
-            </button>
+            </Link>
           </motion.div>
 
         </div>

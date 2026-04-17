@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* 1. FUENTES GOTHAM */
 @font-face {
   font-family: 'Gotham';
   src: url('./assets/fonts/Gotham-Light.otf') format('opentype');
@@ -35,16 +36,13 @@
   font-style: normal;
 }
 
+/* 2. CONFIGURACIÓN DE TEMA TAILWIND v4 */
 @theme inline {
   --font-sans: 'Gotham', sans-serif;
   --font-heading: 'Gotham', sans-serif;
   --font-gotham: 'Gotham', sans-serif;
   --font-serif: 'Gotham', serif;
-}
 
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -76,6 +74,7 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -97,6 +96,9 @@
   --color-diners-hover: #006C73;
 }
 
+@custom-variant dark (&:is(.dark *));
+
+/* 3. VARIABLES DE RAÍZ */
 :root {
   --background: #F7F7F7;
   --foreground: #041E42;
@@ -153,45 +155,61 @@
   --sidebar-ring: #00A3E0;
 }
 
+/* 4. BASE Y ESCALADO (EL 90% QUE TE GUSTA) */
 @layer base {
   html {
+    /* Escala general al 90% para evitar el colapso visual */
+    font-size: 14.4px;
     font-family: 'Gotham', sans-serif;
   }
 
-  body,
+  @media (min-width: 1536px) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+      /* Escala normal en móviles para legibilidad */
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
   button,
   input,
   select,
   textarea {
     font-family: inherit;
   }
+}
 
+/* 5. CONTENEDORES Y MÁRGENES */
+.container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1480px;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 640px) {
   .container {
-    margin-inline: auto;
-    width: 100%;
-    max-width: 1480px;
-    padding-inline: 1.5rem;
+    padding-inline: 2.25rem;
   }
+}
 
-  @media (min-width: 640px) {
-    .container {
-      padding-inline: 2.25rem;
-    }
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: 3.25rem;
   }
+}
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-inline: 3.25rem;
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .container {
-      padding-inline: 4rem;
-    }
-  }
-
-  body {
-    @apply bg-background text-foreground;
+@media (min-width: 1280px) {
+  .container {
+    padding-inline: 4rem;
   }
 }

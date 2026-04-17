@@ -1,6 +1,5 @@
 import { PageIntro } from '@/components/layout/PageIntro';
 import { MentorshipSection } from '@/components/sections/MentorshipSection';
-import { CareerPathSection } from '@/components/sections/CareerPathSection';
 import { ImpactExpectedSection } from '@/components/sections/ImpactEpectedSection';
 
 export const EcosystemPage = () => (
@@ -14,7 +13,6 @@ export const EcosystemPage = () => (
       imageSrc="https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=2070"
     />
     <MentorshipSection />
-    <CareerPathSection />
     <ImpactExpectedSection />
   </>
 );
