@@ -16,13 +16,14 @@ export const Navbar = ({ logoSrc }: NavbarProps) => {
   const logoPath = logoSrc || "/ColorDC_horizontal.png";
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/35 bg-white/58 shadow-[0_10px_35px_rgba(4,30,66,0.06)] backdrop-blur-xl">
-      <div className="container flex h-20 items-center justify-between gap-6">
-        <Link to="/" className="flex items-center gap-3">
+    // Cambios: bg-white/95 para menos transparencia y shadow-lg más profundo
+    <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white/86 shadow-[0_4px_20px_rgba(4,30,66,0.08)] backdrop-blur-md">
+      <div className="container mx-auto flex h-20 items-center justify-between gap-6 px-6">
+        <Link to="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
           <img
             src={logoPath}
             alt="Logo Diners Club"
-            className="h-14 w-auto object-contain"
+            className="h-12 w-auto object-contain"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
@@ -34,7 +35,7 @@ export const Navbar = ({ logoSrc }: NavbarProps) => {
             <NavLink key={item.to} to={item.to} end={item.end}>
               {({ isActive }) => (
                 <span
-                  className={`group relative inline-flex py-3 text-[11px] uppercase tracking-[0.22em] text-[#041E42] transition-all ${isActive ? 'font-black' : 'font-medium'
+                  className={`group relative inline-flex py-3 text-[11px] uppercase tracking-[0.22em] text-[#041E42] transition-all ${isActive ? 'font-black' : 'font-medium opacity-70 hover:opacity-100'
                     }`}
                 >
                   <span>{item.label}</span>
@@ -51,11 +52,10 @@ export const Navbar = ({ logoSrc }: NavbarProps) => {
           <NavLink to="/postula">
             {({ isActive }) => (
               <span
-                className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-[11px] font-black uppercase tracking-[0.2em] transition-all ${
-                  isActive
-                    ? 'bg-[#004C97] text-white shadow-[0_12px_26px_rgba(0,76,151,0.24)]'
-                    : 'bg-[#041E42] text-white hover:bg-[#004C97] hover:shadow-[0_12px_26px_rgba(0,76,151,0.18)]'
-                }`}
+                className={`inline-flex items-center justify-center rounded-full px-7 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 ${isActive
+                  ? 'bg-[#004C97] text-white shadow-[0_8px_20px_rgba(0,76,151,0.3)]'
+                  : 'bg-[#041E42] text-white hover:bg-[#004C97] hover:shadow-[0_8px_20px_rgba(4,30,66,0.2)]'
+                  }`}
               >
                 Iniciar
               </span>

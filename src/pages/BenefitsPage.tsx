@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const benefits = [
   { icon: GraduationCap, title: 'Crecimiento Exponencial', desc: 'Certificaciones y rutas de carrera claras.', img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop' },
   { icon: HeartPulse, title: 'Bienestar Integral', desc: 'Equilibrio real entre vida y oficina.', img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop' },
-  { icon: Home, title: 'Cultura Flexible', desc: 'Modelos hÃ­bridos adaptados a ti.', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop' },
+  { icon: Home, title: 'Cultura Flexible', desc: 'Modelos híbridos adaptados a ti.', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop' },
 ];
 
 export const BenefitsPage = () => (
@@ -28,10 +28,10 @@ export const BenefitsPage = () => (
             className="text-5xl md:text-7xl font-black text-diners-twilight tracking-tighter leading-[0.95] mb-8"
           >
             Tu carrera merece un <br />
-            <span className="text-diners-lakefront italic font-light">estÃ¡ndar premium.</span>
+            <span className="text-diners-lakefront italic font-light">estándar premium.</span>
           </motion.h1>
           <p className="text-xl font-light text-diners-twilight-65 max-w-2xl leading-relaxed">
-            No solo ofrecemos beneficios; construimos un ecosistema donde el talento digital y financiero encuentra su mÃ¡xima expresiÃ³n.
+            No solo ofrecemos beneficios; construimos un ecosistema donde el talento digital y financiero encuentra su máxima expresión.
           </p>
         </div>
       </div>
@@ -62,7 +62,7 @@ export const BenefitsPage = () => (
       </div>
     </section>
 
-    {/* DIFERENCIALES: Split Layout DinÃ¡mico */}
+    {/* DIFERENCIALES: Split Layout Dinámico */}
     <section className="py-24 bg-diners-twilight text-white">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-20 items-center">
@@ -77,21 +77,21 @@ export const BenefitsPage = () => (
             {/* Float Card */}
             <div className="absolute -bottom-10 -right-10 bg-diners-lakefront p-8 rounded-[2rem] shadow-2xl max-w-xs hidden md:block">
               <Sparkles className="text-white mb-4 w-8 h-8" />
-              <p className="font-bold text-lg leading-tight">Elevamos tu perfil al estÃ¡ndar internacional.</p>
+              <p className="font-bold text-lg leading-tight">Elevamos tu perfil al estándar internacional.</p>
             </div>
           </div>
 
           <div className="space-y-12">
             <div>
-              <h2 className="text-4xl font-black tracking-tight mb-6">Â¿Por quÃ© elegirnos?</h2>
+              <h2 className="text-4xl font-black tracking-tight mb-6">¿Por qué elegirnos?</h2>
               <div className="h-1 w-20 bg-diners-blue-sky" />
             </div>
 
             <div className="grid gap-8">
               {[
-                { t: 'Talento con AceleraciÃ³n', d: 'Proyectos visibles desde el dÃ­a uno con impacto real.' },
-                { t: 'Marca de Prestigio', d: 'Respaldo de una red global con ejecuciÃ³n local premium.' },
-                { t: 'Rutas de ProyecciÃ³n', d: 'MentorÃ­as directas con lÃ­deres que transforman el sector.' }
+                { t: 'Talento con Aceleración', d: 'Proyectos visibles desde el día uno con impacto real.' },
+                { t: 'Marca de Prestigio', d: 'Respaldo de una red global con ejecución local premium.' },
+                { t: 'Rutas de Proyección', d: 'Mentorías directas con líderes que transforman el sector.' }
               ].map((item, idx) => (
                 <div key={idx} className="flex gap-6 group">
                   <div className="flex-shrink-0 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-diners-blue-sky transition-colors">
@@ -116,7 +116,7 @@ export const BenefitsPage = () => (
           <h2 className="text-4xl font-black text-diners-twilight tracking-tight">Cultura y Estabilidad</h2>
           <div className="mt-4 flex justify-center gap-10">
             {[
-              { v: '+30', l: 'AÃ±os de historia' },
+              { v: '+30', l: 'Años de historia' },
               { v: '+500', l: 'Colaboradores' },
               { v: '#1', l: 'Top Employer' }
             ].map((s, i) => (
@@ -130,7 +130,7 @@ export const BenefitsPage = () => (
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            'FormaciÃ³n Continua', 'TecnologÃ­a IA-First', 'Liderazgo Humano', 'Balance HÃ­brido'
+            'Formación Continua', 'Tecnología IA-First', 'Liderazgo Humano', 'Balance Híbrido'
           ].map((p, i) => (
             <div key={i} className="p-8 border border-diners-gray-1 rounded-[2rem] hover:bg-diners-white-sand/30 transition-colors">
               <div className="w-2 h-2 bg-diners-lakefront rounded-full mb-4" />
@@ -146,16 +146,16 @@ export const BenefitsPage = () => (
       <div className="container">
         <div className="bg-diners-blue-sky/10 rounded-[4rem] p-16 text-center relative overflow-hidden">
           <div className="relative z-10">
-            <h2 className="text-4xl font-black text-diners-twilight mb-6">Â¿Lista para el siguiente paso?</h2>
+            <h2 className="text-4xl font-black text-diners-twilight mb-6">¿Lista para el siguiente paso?</h2>
             <p className="text-lg font-light text-diners-twilight-65 mb-10 max-w-xl mx-auto">
-              Explora nuestras vacantes y encuentra el lugar donde tu talento brillarÃ¡ con fuerza.
+              Explora nuestras vacantes y encuentra el lugar donde tu talento brillará con fuerza.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/vacantes" className="bg-diners-twilight text-white px-10 py-4 rounded-full font-black uppercase text-[10px] tracking-[0.2em] hover:bg-diners-lakefront transition-all">
                 Ver Vacantes Activas
               </Link>
               <Link to="/postula" className="border border-diners-twilight text-diners-twilight px-10 py-4 rounded-full font-black uppercase text-[10px] tracking-[0.2em] hover:bg-diners-twilight hover:text-white transition-all">
-                PostulaciÃ³n EspontÃ¡nea
+                Postulación Espontánea
               </Link>
             </div>
           </div>
