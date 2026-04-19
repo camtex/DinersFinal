@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# Tu Camino en Diners Club 💎
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma de talento diseñada para **Diners Club Perú**, enfocada en la personalización de la experiencia del candidato mediante lógica de "match" basada en afinidades y una arquitectura de diseño premium.
 
-Currently, two official plugins are available:
+## 🚀 Tecnologías
+* **Frontend:** React + TypeScript
+* **Estilos:** Tailwind CSS v4 (Configuración personalizada con Gotham Font)
+* **Build Tool:** Vite
+* **Iconografía:** Lucide React
+* **Componentes:** Radix UI / Shadcn UI
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Características Principales
+- **Matching Inteligente:** Algoritmo que calcula la afinidad entre el perfil del candidato y las vacantes.
+- **Dashboard Dinámico:** Gestión en tiempo real de postulaciones usando persistencia en `localStorage`.
+- **Test de Afinidad:** Quiz interactivo para determinar rasgos profesionales.
+- **Diseño Premium:** Interfaz formal y minimalista alineada a la identidad corporativa de Diners Club (#041E42, #00A3E0).
 
-## React Compiler
+## 💻 Instalación y Uso
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Clonar el repositorio:
+   ```bash  
+   git clone [url-del-repo]
+   cd Diners3
+   ```
 
-## Expanding the ESLint configuration
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+3. Ejecutar en modo desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. Compilar para producción:
+   ```bash
+   npm run build
+   ```

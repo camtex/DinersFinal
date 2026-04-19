@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  FileSearch, Link2, LogOut, Search, Sparkles, Upload,
+  LogOut, Search, Sparkles, Upload,
   UserRound, Briefcase, ChevronRight, RotateCcw, Trash2
 } from 'lucide-react';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { TRAIT_LABELS, VACANCIES } from '@/data/mockData';
 import {
   clearPendingVacancyApplication,
@@ -240,7 +239,7 @@ export const DashboardPage = () => {
                       onClick={() => navigate('/explora')}
                       className="rounded-full bg-diners-blue-sky text-white hover:bg-white hover:text-[#041E42] h-9 px-6 text-[11px] font-bold transition-all shadow-lg shadow-blue-400/20 border-none"
                     >
-                      Descubrir mis rasgos
+                      Ir al Test
                     </Button>
                   </div>
                 )}
