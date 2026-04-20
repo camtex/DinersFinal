@@ -17,7 +17,7 @@ export const BenefitsPage = () => (
       eyebrow=""
       title="Tu carrera merece un estandar superior"
       description="No solo ofrecemos beneficios; construimos un ecosistema donde el talento digital y financiero encuentra su maxima expresion con un nivel de excelencia internacional."
-      imageSrc="./fotomujer.png" // Imagen profesional/editorial
+      imageSrc="./imagen3.png" // Imagen profesional/editorial
     />
 
     {/* BENEFICIOS: Cards con Imagen y Efecto de Elevación */}

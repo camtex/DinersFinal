@@ -135,7 +135,7 @@ export const DashboardPage = () => {
         eyebrow="Perfil"
         title="Tu espacio personal"
         description="Gestiona tu carrera, revisa tus afinidades y postula a puestos alineados con tu perfil."
-        imageSrc="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2070"
+        imageSrc="/perfil.jpg"
       />
 
       <section className="bg-white py-12">

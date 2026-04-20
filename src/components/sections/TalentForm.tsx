@@ -1,286 +1,272 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle2, LoaderCircle } from "lucide-react";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { CheckCircle2, LoaderCircle, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { db } from "@/firebase";
 import {
-  completeEmailLinkAccess,
-  getPendingProfile,
-  hasEmailLink,
-  sendAccessLink,
+  completeGoogleRedirectAccess,
+  loginWithEmailPassword,
+  registerWithEmailPassword,
   signInWithGoogleAccount,
 } from "@/auth";
-import { consumePostLoginRedirect, saveStoredUserProfile } from "@/lib/dashboardStorage";
+import { consumePostLoginRedirect } from "@/lib/dashboardStorage";
 
 type AccessMode = "login" | "register";
-
-const initialForm = {
-  firstName: "",
-  lastName: "",
-  email: "",
-};
-
-const modeCopy: Record<AccessMode, { title: string; description: string; success: string; emailNotice: string; }> = {
-  register: {
-    title: "Crea tu acceso",
-    description: "Registra tu perfil con nombre, apellido y Gmail para entrar al ecosistema.",
-    success: "Tu registro fue confirmado y ya quedaste conectado a la plataforma.",
-    emailNotice: "Te enviamos un enlace de registro a tu Gmail para validar tu acceso.",
-  },
-  login: {
-    title: "Inicia tu sesion",
-    description: "Usa tu Gmail o Google para entrar de forma segura y continuar tu postulacion.",
-    success: "Tu sesion quedo iniciada correctamente.",
-    emailNotice: "Te enviamos un enlace de acceso a tu Gmail para que inicies sesion.",
-  },
-};
 
 export const TalentForm = () => {
   const navigate = useNavigate();
   const [mode, setMode] = useState<AccessMode>("register");
-  const [formData, setFormData] = useState(initialForm);
-  const [statusMessage, setStatusMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCompletingAccess, setIsCompletingAccess] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const navigateAfterAccess = () => {
-    navigate(consumePostLoginRedirect() || "/dashboard");
-  };
-
-  useEffect(() => {
-    if (!errorMessage) return;
-
-    const timer = setTimeout(() => setErrorMessage(""), 5000);
-    return () => clearTimeout(timer);
-  }, [errorMessage]);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
-    setErrorMessage("");
-    setStatusMessage("");
-  }, [mode]);
-
-  useEffect(() => {
-    const completeAccess = async () => {
-      if (!hasEmailLink(window.location.href)) {
-        const pendingProfile = getPendingProfile();
-        if (pendingProfile) {
-          setFormData({ ...initialForm, ...pendingProfile });
-          setMode(pendingProfile.mode);
-        }
-        setIsCompletingAccess(false);
-        return;
-      }
-
+    const completeRedirect = async () => {
       try {
-        const { user, profile } = await completeEmailLinkAccess(window.location.href);
-        await saveUserProfile({
-          uid: user.uid,
-          email: user.email ?? profile?.email ?? "",
-          firstName: profile?.firstName ?? "",
-          lastName: profile?.lastName ?? "",
-          mode: profile?.mode ?? "login",
-        });
-        setSubmitted(true);
-        setStatusMessage("Acceso confirmado correctamente.");
-      } catch {
-        setErrorMessage("No pudimos completar el acceso. Solicita un nuevo enlace.");
-      } finally {
-        setIsCompletingAccess(false);
+        const result = await completeGoogleRedirectAccess();
+        if (result?.user) {
+          setSubmitted(true);
+          navigate(consumePostLoginRedirect() || "/dashboard", { replace: true });
+        }
+      } catch (error) {
+        setErrorMessage(error instanceof Error ? error.message : "No pudimos completar el acceso con Google.");
       }
     };
 
-    void completeAccess();
-  }, []);
+    void completeRedirect();
+  }, [navigate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
-  };
-
-  const handleAccessRequest = async (selectedMode: AccessMode) => {
-    if (!formData.email.endsWith("@gmail.com")) {
-      setErrorMessage("Ingresa un correo de Gmail valido.");
-      return;
-    }
-
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage("");
     setIsSubmitting(true);
 
     try {
-      await sendAccessLink({ ...formData, mode: selectedMode });
-      setStatusMessage(modeCopy[selectedMode].emailNotice);
-    } catch {
-      setErrorMessage("Error al enviar el acceso. Intentalo de nuevo.");
+      if (mode === "register") {
+        await registerWithEmailPassword({
+          email: formData.email.trim(),
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        });
+      } else {
+        await loginWithEmailPassword({
+          email: formData.email.trim(),
+          password: formData.password,
+        });
+      }
+
+      setSubmitted(true);
+      navigate(consumePostLoginRedirect() || "/dashboard", { replace: true });
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "No pudimos procesar el acceso.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
-    setIsSubmitting(true);
     setErrorMessage("");
+    setIsSubmitting(true);
 
     try {
-      const result = await signInWithGoogleAccount();
-      const user = result.user;
-      const nameParts = user.displayName?.split(" ") ?? ["", ""];
-
-      await saveUserProfile({
-        uid: user.uid,
-        email: user.email ?? "",
-        firstName: nameParts[0],
-        lastName: nameParts.slice(1).join(" "),
-        mode: "login",
-      });
-
-      setSubmitted(true);
-      setStatusMessage("Acceso con Google confirmado.");
-    } catch (error: any) {
-      if (error?.code !== "auth/cancelled-popup-request" && error?.code !== "auth/popup-closed-by-user") {
-        setErrorMessage("No pudimos vincular tu cuenta de Google. Revisa la configuracion de Firebase e intentalo de nuevo.");
-      }
-    } finally {
+      await signInWithGoogleAccount();
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Error al conectar con Google.");
       setIsSubmitting(false);
     }
   };
 
-  if (isCompletingAccess) {
-    return (
-      <div className="flex h-screen flex-col justify-center bg-diners-twilight py-40 text-center text-white">
-        <LoaderCircle className="mx-auto mb-6 h-12 w-12 animate-spin text-diners-blue-sky" />
-        <h2 className="text-4xl font-black">Validando acceso...</h2>
-      </div>
-    );
-  }
-
   return (
-    <section id="registro" className="relative overflow-hidden bg-[#f8fbfd] py-24 md:py-32">
-      <div className="container relative z-10 mx-auto px-6">
-        <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2.5rem] border border-white/60 bg-white/95 shadow-[0_24px_60px_rgba(4,30,66,0.08)] lg:grid-cols-[0.92fr_1.08fr]">
-          <div className="flex flex-col justify-between bg-diners-twilight px-8 py-12 text-white md:px-10 md:py-14">
+    <section className="relative min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8 font-gotham">
+      <div className="absolute top-0 left-0 w-64 h-64 bg-diners-blue-sky/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-diners-twilight/5 rounded-full blur-3xl translate-x-1/3 translate-y-1/3" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative w-full max-w-6xl grid lg:grid-cols-[45%_55%] bg-white rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden"
+      >
+        <div className="relative hidden lg:block overflow-hidden bg-[#041E42]">
+          <img
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200"
+            alt="Office"
+            className="absolute inset-0 h-full w-full object-cover mix-blend-overlay opacity-40 scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#041E42]/80 via-transparent to-[#041E42]" />
+
+          <div className="relative h-full flex flex-col justify-between p-16 text-white">
             <div>
-              <span className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white/70">
-                Acceso Diners
-              </span>
-              <h2 className="mt-8 text-3xl font-black leading-tight md:text-5xl">
-                Tu acceso a un perfil mas <span className="text-diners-blue-sky">claro y seguro.</span>
+              <h2 className="text-5xl font-black leading-[1.1] mb-6">
+                Impulsa el futuro <br />
+                <span className="text-diners-blue-sky">Diners Club.</span>
               </h2>
-              <p className="mt-6 text-sm font-light leading-relaxed text-white/65 md:text-base">
-                Puedes entrar con Google o recibir un enlace seguro en tu correo. Una vez dentro, veras tu perfil y continuaras tu postulacion.
+              <p className="text-lg font-light text-white/70 leading-relaxed max-w-sm">
+                Tu potencial encuentra su proximo gran escenario. Unete para transformar la experiencia financiera.
               </p>
             </div>
-          </div>
-
-          <div className="px-6 py-10 md:px-10 md:py-12">
-            {submitted ? (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-16 text-center">
-                <CheckCircle2 className="mx-auto mb-6 h-16 w-16 text-diners-lakefront" />
-                <h3 className="text-3xl font-black text-diners-twilight">Acceso confirmado</h3>
-                <p className="mt-4 font-light text-slate-500">{statusMessage || modeCopy[mode].success}</p>
-                <Button onClick={navigateAfterAccess} className="mt-8 rounded-full px-10">
-                  Ir a mi perfil
-                </Button>
-              </motion.div>
-            ) : (
-              <div className="mx-auto max-w-xl">
-                <div className="mb-6">
-                  <h3 className="text-2xl font-black text-diners-twilight">{modeCopy[mode].title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-diners-twilight-65">{modeCopy[mode].description}</p>
-                </div>
-
-                <div className="mb-8 flex gap-1 rounded-2xl bg-slate-100 p-1.5">
-                  <button type="button" onClick={() => setMode("register")} className={`flex-1 rounded-xl py-3 text-xs font-black uppercase tracking-wider transition-all ${mode === "register" ? "bg-white text-diners-twilight shadow-sm" : "text-slate-400"}`}>
-                    Registrarte
-                  </button>
-                  <button type="button" onClick={() => setMode("login")} className={`flex-1 rounded-xl py-3 text-xs font-black uppercase tracking-wider transition-all ${mode === "login" ? "bg-white text-diners-twilight shadow-sm" : "text-slate-400"}`}>
-                    Iniciar sesion
-                  </button>
-                </div>
-
-                <div className="mb-6 rounded-2xl border border-diners-blue-sky/15 bg-diners-blue-sky/5 p-4 text-[12px] leading-relaxed text-diners-twilight-65">
-                  Este acceso no usa contrasena en el formulario. Puedes continuar con Google o recibir un enlace seguro en tu correo.
-                </div>
-
-                <form onSubmit={(e) => { e.preventDefault(); void handleAccessRequest(mode); }} className="space-y-5">
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase text-slate-400">Nombre</Label>
-                      <Input id="firstName" value={formData.firstName} onChange={handleChange} placeholder="Tu nombre" className="h-12 rounded-2xl border-slate-200" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black uppercase text-slate-400">Apellido</Label>
-                      <Input id="lastName" value={formData.lastName} onChange={handleChange} placeholder="Tu apellido" className="h-12 rounded-2xl border-slate-200" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase text-slate-400">Gmail</Label>
-                    <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="tunombre@gmail.com" className="h-12 rounded-2xl border-slate-200" />
-                  </div>
-
-                  <AnimatePresence>
-                    {errorMessage && (
-                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="rounded-xl border border-red-100 bg-red-50 p-3 text-[11px] font-bold text-red-600">
-                        {errorMessage}
-                      </motion.div>
-                    )}
-                    {statusMessage && (
-                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="rounded-xl border border-diners-blue-sky/20 bg-diners-blue-sky/10 p-3 text-[11px] font-bold text-diners-twilight">
-                        {statusMessage}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <Button disabled={isSubmitting} className="h-14 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-lg active:scale-95">
-                      {isSubmitting ? <LoaderCircle className="animate-spin" /> : mode === "register" ? "Enviar enlace" : "Recibir acceso"}
-                    </Button>
-
-                    <button
-                      type="button"
-                      onClick={handleGoogleSignIn}
-                      disabled={isSubmitting}
-                      className="flex h-14 items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-white text-sm font-bold text-diners-twilight shadow-sm transition-all hover:bg-slate-50 disabled:opacity-50"
-                    >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24">
-                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                      </svg>
-                      Continuar con Google
-                    </button>
-                  </div>
-                </form>
-              </div>
-            )}
+            <div className="flex items-center gap-4 text-sm font-medium text-white/50">
+              <span className="w-8 h-[1px] bg-white/20" />
+              <span>Unete a la Familia Diners Club</span>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="flex flex-col p-8 md:p-16 lg:p-20 justify-center">
+          {submitted ? (
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="text-center space-y-6"
+            >
+              <div className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle2 className="h-12 w-12 text-green-500" />
+              </div>
+              <h3 className="text-4xl font-black text-diners-twilight">Bienvenido</h3>
+              <p className="text-slate-500 max-w-xs mx-auto">Tu perfil ha sido configurado. Ya puedes acceder a tu panel personalizado.</p>
+              <Button
+                onClick={() => navigate("/dashboard")}
+                className="w-full h-14 rounded-2xl bg-[#041E42] hover:bg-diners-blue-sky text-white font-bold text-lg transition-all shadow-xl group"
+              >
+                Ir a mi Dashboard <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </motion.div>
+          ) : (
+            <div className="max-w-md mx-auto w-full space-y-8">
+              <div className="space-y-2">
+                <h3 className="text-3xl font-black text-diners-twilight">
+                  {mode === "register" ? "Crear perfil" : "Bienvenido de nuevo"}
+                </h3>
+                <p className="text-slate-400 font-medium">Ingresa tus credenciales para continuar.</p>
+              </div>
+
+              <div className="flex p-1 bg-slate-100 rounded-2xl">
+                {(["register", "login"] as const).map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => {
+                      setMode(m);
+                      setErrorMessage("");
+                    }}
+                    className={`flex-1 py-3 text-[11px] font-black uppercase tracking-widest rounded-xl transition-all ${mode === m ? "bg-white text-diners-twilight shadow-sm scale-[1.02]" : "text-slate-400 hover:text-slate-600"}`}
+                  >
+                    {m === "register" ? "Registro" : "Login"}
+                  </button>
+                ))}
+              </div>
+
+              <form onSubmit={handleEmailAuth} className="space-y-4">
+                {mode === "register" && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Nombre</Label>
+                      <Input
+                        placeholder="Juan"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                        className="h-12 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-diners-blue-sky/20"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Apellido</Label>
+                      <Input
+                        placeholder="Perez"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                        className="h-12 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-diners-blue-sky/20"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Correo Electronico</Label>
+                  <Input
+                    type="email"
+                    placeholder="nombre@correo.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="h-12 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-diners-blue-sky/20"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-[10px] font-bold uppercase text-slate-500 ml-1">Contrasena</Label>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="h-12 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-diners-blue-sky/20 pr-12"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
+                </div>
+
+                <AnimatePresence>
+                  {errorMessage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-red-50 text-red-600 text-[11px] p-4 rounded-xl font-bold border border-red-100"
+                    >
+                      {errorMessage}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="pt-4 space-y-4">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full h-14 rounded-2xl bg-[#041E42] hover:bg-diners-blue-sky text-white font-black uppercase tracking-widest transition-all shadow-lg active:scale-[0.98]"
+                  >
+                    {isSubmitting ? <LoaderCircle className="animate-spin" /> : mode === "register" ? "Crear Perfil" : "Entrar"}
+                  </Button>
+
+                  <div className="flex items-center gap-4 py-2">
+                    <div className="h-[1px] flex-1 bg-slate-100" />
+                    <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">o</span>
+                    <div className="h-[1px] flex-1 bg-slate-100" />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignIn}
+                    disabled={isSubmitting}
+                    className="w-full h-14 rounded-2xl border-2 border-slate-100 hover:bg-slate-50 transition-all flex items-center justify-center gap-3 font-bold text-slate-600 active:scale-[0.98]"
+                  >
+                    <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="G" />
+                    <span>Continuar con Google</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
+        </div>
+      </motion.div>
     </section>
   );
-};
-
-const saveUserProfile = async ({ uid, email, firstName, lastName, mode }: { uid: string; email: string; firstName: string; lastName: string; mode: AccessMode; }) => {
-  saveStoredUserProfile({
-    uid,
-    firstName,
-    lastName,
-    fullName: `${firstName} ${lastName}`.trim(),
-    email,
-    lastAccessMode: mode,
-  });
-
-  await setDoc(doc(db, "users", uid), {
-    firstName,
-    lastName,
-    fullName: `${firstName} ${lastName}`.trim(),
-    email,
-    lastAccessMode: mode,
-    lastAccessAt: serverTimestamp(),
-  }, { merge: true });
 };

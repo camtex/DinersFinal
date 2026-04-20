@@ -6,9 +6,10 @@ export const TalentPage = () => (
     <PageIntro
       variant="centered-blue"
       eyebrow=""
-      title="Un punto de entrada claro para captar talento"
-      description="La pagina de postulacion queda separada del resto de la propuesta para que el llamado a la accion tenga mas foco y una lectura mas cercana a una experiencia corporativa real."
+      title="Donde tu potencial encuentra su próximo gran escenario."
+      description="Tu carrera merece un entorno a la altura de tus ambiciones. Únete a Diners Club y transforma tu visión en soluciones de impacto global dentro de una cultura de excelencia."
     />
     <TalentForm />
   </>
 );
+

@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const MentorshipSection = () => (
@@ -14,7 +13,7 @@ export const MentorshipSection = () => (
             En ELLAS DIGITAL, la mentoría no es solo un consejo, es el factor clave que acelera tu crecimiento profesional.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-10">
           {[
             { value: "77%", label: "Permanencia", desc: "Más probabilidad de continuar en tecnología.", source: "Anita Borg Institute", color: "text-diners-lakefront" },

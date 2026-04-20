@@ -5,9 +5,9 @@ import { Menu, X, ChevronRight } from 'lucide-react';
 
 const navItems = [
   { to: '/', label: 'Inicio', end: true },
-  { to: '/ecosistema', label: 'Propuesta' },
+  { to: '/ecosistema', label: 'Tu Camino' },
   { to: '/beneficios', label: 'Beneficios' },
-  { to: '/explora', label: 'Rutas' },
+  { to: '/explora', label: 'Explora' },
   { to: '/vacantes', label: 'Vacantes' },
 ];
 
@@ -21,10 +21,8 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
   const ctaPath = isLoggedIn ? '/dashboard' : '/postula';
   const ctaLabel = isLoggedIn ? 'Perfil' : '¡Unete!';
 
-  // Cerrar menú al cambiar de ruta
   useEffect(() => setIsOpen(false), [location]);
 
-  // Bloquear scroll
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : 'unset';
   }, [isOpen]);
@@ -32,9 +30,7 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-100 bg-white shadow-[0_4px_20px_rgba(4,30,66,0.08)]">
       <div className="container mx-auto flex h-20 items-center justify-between gap-6 px-6">
-
-        {/* LOGO */}
-        <Link to="/" className="flex items-center gap-3 relative z-[80]">
+        <Link to="/" className="relative z-[80] flex items-center gap-3">
           <img
             src={logoPath}
             alt="Diners Club"
@@ -42,20 +38,27 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
           />
         </Link>
 
-        {/* DESKTOP NAV */}
         <div className="hidden items-center gap-8 md:flex">
           {navItems.map(item => (
             <NavLink key={item.to} to={item.to} end={item.end}>
               {({ isActive }) => (
-                <span className={`relative py-3 text-[11px] uppercase tracking-[0.22em] text-[#041E42] transition-all ${isActive ? 'font-black' : 'font-medium opacity-70 hover:opacity-100'}`}>
+                <motion.span
+                  initial="rest"
+                  animate={isActive ? "active" : "rest"}
+                  whileHover="hover"
+                  className={`relative py-3 text-[11px] uppercase tracking-[0.22em] text-[#041E42] transition-all ${isActive ? 'font-black' : 'font-medium opacity-70 hover:opacity-100'}`}
+                >
                   {item.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="underline"
-                      className="absolute bottom-0 left-0 h-[2px] w-full bg-[#041E42]"
-                    />
-                  )}
-                </span>
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-[2px] w-full bg-[#041E42]"
+                    variants={{
+                      rest: { scaleX: 0, originX: 0 },
+                      hover: { scaleX: 1, originX: 0 },
+                      active: { scaleX: 1, originX: 0 },
+                    }}
+                    transition={{ duration: 0.24, ease: 'easeOut' }}
+                  />
+                </motion.span>
               )}
             </NavLink>
           ))}
@@ -68,16 +71,13 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
           </Link>
         </div>
 
-        {/* MOBILE BUTTON */}
-        <button onClick={() => setIsOpen(true)} className="md:hidden text-[#041E42]">
+        <button onClick={() => setIsOpen(true)} className="text-[#041E42] md:hidden">
           <Menu size={28} />
         </button>
 
-        {/* MOBILE MENU */}
         <AnimatePresence>
           {isOpen && (
             <>
-              {/* OVERLAY (sin blur) */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -86,7 +86,6 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
                 className="fixed inset-0 z-[60] bg-black/40"
               />
 
-              {/* DRAWER FULL SOLID */}
               <motion.div
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
@@ -94,16 +93,13 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
                 transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                 className="fixed inset-0 z-[70] bg-[#0A2540] text-white"
               >
-                <div className="flex flex-col h-full p-8 bg-[#0A2540]">
-
-                  {/* CLOSE */}
-                  <div className="flex justify-end mb-8 pt-4">
+                <div className="flex h-full flex-col bg-[#0A2540] p-8">
+                  <div className="mb-8 flex justify-end pt-4">
                     <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white">
                       <X size={26} />
                     </button>
                   </div>
 
-                  {/* CTA */}
                   <div className="mb-10">
                     <Link
                       to={ctaPath}
@@ -113,7 +109,6 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
                     </Link>
                   </div>
 
-                  {/* LINKS */}
                   <div className="flex flex-col">
                     {navItems.map((item) => (
                       <NavLink key={item.to} to={item.to} end={item.end}>
@@ -128,13 +123,11 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
                       </NavLink>
                     ))}
                   </div>
-
                 </div>
               </motion.div>
             </>
           )}
         </AnimatePresence>
-
       </div>
     </nav>
   );
