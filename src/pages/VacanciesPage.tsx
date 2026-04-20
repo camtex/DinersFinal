@@ -27,8 +27,8 @@ export const VacanciesPage = () => {
       variant="diners-blue"
       eyebrow="Vacantes"
       title="Oportunidades conectadas con una linea de carrera real"
-      description="Esta seccion toma como base el lenguaje del CareerPathSection para presentar vacantes y crecimiento dentro de una misma narrativa."
-      imageSrc="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070"
+      description="En esta sección encontrarás vacantes y oportunidades de crecimiento organizadas en una misma línea de carrera, para ayudarte a visualizar tu futuro profesional."
+      imageSrc="https://mundoempresas.com.ar/wp-content/uploads/2024/05/reinventart-TEC.webp"
     />
 
     <CareerPathSection />

@@ -32,7 +32,7 @@ export const TestimonialsSection = () => {
       quote: "Poder diseñar soluciones que impactan directamente en la experiencia del socio Diners Club es lo que más me motiva cada día.",
       author: "Desarrollador Fullstack",
       org: "Diners Club Perú",
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop"
+      image: " https://cdn.prod.website-files.com/66a760bef139635a338ead52/66ea9004dfe82fcf91cc9cf5_Card-3.jpg"
     },
     {
       title: "Visualizando el futuro",

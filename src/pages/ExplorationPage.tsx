@@ -68,7 +68,7 @@ export const ExplorationPage = ({
       <PageIntro
         eyebrow=""
         title="Explora rutas, habilidades e intereses por separado"
-        description="Ahora esta experiencia vive como una pagina propia. El recorrido de descubrimiento, el quiz vocacional y los resultados estan aislados para que la navegacion sea mas clara y profesional."
+        description="Ahora esta experiencia tiene su propia página. Podrás descubrir rutas, realizar el test vocacional y ver tus resultados de forma organizada, para una navegación más clara y sencilla.."
         imageSrc="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072"
       />
 

@@ -10,7 +10,7 @@ export const CareerPathSection = () => {
       level: "Nivel 01",
       roles: ["Practicantes Pre-profesionales", "Practicantes Profesionales"],
       desc: "Inicia tu camino en un entorno de aprendizaje acelerado, participando en proyectos reales desde el primer día.",
-      image: "https://www.universia.net/content/dam/universia/imagenes/2020/03/practicas_pre_profesionales/_jcr_content/renditions/thumb-xl.jpg"
+      image: "https://ciencias.cayetano.edu.pe/wp-content/uploads/sites/28/2024/04/cheerful-brunette-group-young-people-casual-clothes-working-modern-office-compressed-1.jpg"
     },
     {
       level: "Nivel 02",
