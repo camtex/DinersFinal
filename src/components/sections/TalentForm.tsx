@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { db } from "@/firebase";
 import {
   completeEmailLinkAccess,
-  getPendingProfile,
+  //getPendingProfile,
   hasEmailLink,
   sendAccessLink,
   signInWithGoogleAccount,
