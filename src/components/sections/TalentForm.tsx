@@ -15,6 +15,8 @@ import {
   signInWithGoogleAccount,
 } from "@/auth";
 import { consumePostLoginRedirect, saveStoredUserProfile } from "@/lib/dashboardStorage";
+import { getRedirectResult } from "firebase/auth";
+import { auth } from "@/firebase";
 
 type AccessMode = "login" | "register";
 
@@ -65,18 +67,11 @@ export const TalentForm = () => {
     setStatusMessage("");
   }, [mode]);
 
-  useEffect(() => {
-    const completeAccess = async () => {
-      if (!hasEmailLink(window.location.href)) {
-        const pendingProfile = getPendingProfile();
-        if (pendingProfile) {
-          setFormData({ ...initialForm, ...pendingProfile });
-          setMode(pendingProfile.mode);
-        }
-        setIsCompletingAccess(false);
-        return;
-      }
-
+useEffect(() => {
+  const completeAccess = async () => {
+    // 1. Prioridad: Verificar si venimos de un enlace de Gmail
+    if (hasEmailLink(window.location.href)) {
+      setIsCompletingAccess(true);
       try {
         const { user, profile } = await completeEmailLinkAccess(window.location.href);
         await saveUserProfile({
@@ -88,15 +83,61 @@ export const TalentForm = () => {
         });
         setSubmitted(true);
         setStatusMessage("Acceso confirmado correctamente.");
-      } catch {
-        setErrorMessage("No pudimos completar el acceso. Solicita un nuevo enlace.");
-      } finally {
-        setIsCompletingAccess(false);
+      } catch (err) {
+        setErrorMessage("No pudimos completar el acceso por correo.");
       }
-    };
+      setIsCompletingAccess(false);
+      return;
+    }
 
-    void completeAccess();
-  }, []);
+    // 2. Manejar el regreso de Google Redirect
+    try {
+      // Importante: No uses 'auth' directamente si no estás seguro de que cargó
+      const result = await getRedirectResult(auth);
+      
+      if (result?.user) {
+        const user = result.user;
+        const nameParts = user.displayName?.split(" ") ?? ["", ""];
+        
+        await saveUserProfile({
+          uid: user.uid,
+          email: user.email ?? "",
+          firstName: nameParts[0],
+          lastName: nameParts.slice(1).join(" "),
+          mode: "login",
+        });
+
+        setSubmitted(true);
+        setStatusMessage("Autenticación con Google exitosa.");
+      }
+    } catch (error: any) {
+      console.error("Error en Redirect:", error);
+      setErrorMessage("Error al procesar el login con Google.");
+    }
+
+    // 3. RESPALDO (Crucial): Si el redirect falló pero el usuario ya tiene sesión
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user && !submitted) {
+        // Si hay un usuario pero el formulario no ha marcado "submitted"
+        // significa que la sesión ya existe pero no la procesamos
+        const nameParts = user.displayName?.split(" ") ?? ["", ""];
+        await saveUserProfile({
+          uid: user.uid,
+          email: user.email ?? "",
+          firstName: nameParts[0],
+          lastName: nameParts.slice(1).join(" "),
+          mode: "login",
+        });
+        setSubmitted(true);
+      }
+      setIsCompletingAccess(false);
+    });
+
+    return () => unsubscribe();
+  };
+
+  void completeAccess();
+}, [submitted]); // Añadimos submitted como dependencia para evitar bucles
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -120,33 +161,20 @@ export const TalentForm = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    setIsSubmitting(true);
-    setErrorMessage("");
+const handleGoogleSignIn = async () => {
+  setIsSubmitting(true);
+  setErrorMessage("");
 
-    try {
-      const result = await signInWithGoogleAccount();
-      const user = result.user;
-      const nameParts = user.displayName?.split(" ") ?? ["", ""];
-
-      await saveUserProfile({
-        uid: user.uid,
-        email: user.email ?? "",
-        firstName: nameParts[0],
-        lastName: nameParts.slice(1).join(" "),
-        mode: "login",
-      });
-
-      setSubmitted(true);
-      setStatusMessage("Autenticacion con Google exitosa.");
-    } catch (error: any) {
-      if (error?.code !== "auth/cancelled-popup-request" && error?.code !== "auth/popup-closed-by-user") {
-        setErrorMessage("No pudimos vincular tu cuenta de Google. Revisa la configuracion de Firebase e intentalo de nuevo.");
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  try {
+    // Al usar Redirect, la ejecución de esta función se detiene aquí 
+    // porque la página se recarga/redirige.
+    await signInWithGoogleAccount(); 
+  } catch (error: any) {
+    console.error(error);
+    setErrorMessage("No se pudo iniciar el flujo de Google.");
+    setIsSubmitting(false);
+  }
+};
 
   if (isCompletingAccess) {
     return (

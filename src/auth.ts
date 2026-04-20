@@ -3,6 +3,7 @@ import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithPopup,
+  signInWithRedirect,
   signInWithEmailLink,
   signOut,
   updateProfile,
@@ -79,7 +80,7 @@ export const completeEmailLinkAccess = async (url: string) => {
 export const signInWithGoogleAccount = async () => {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
-  return signInWithPopup(auth, provider);
+  return signInWithRedirect(auth, provider);
 };
 
 export const signOutSession = async () => {
