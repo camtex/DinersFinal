@@ -14,10 +14,10 @@ export const BenefitsPage = () => (
     {/* HERO SECTION: Ahora usa PageIntro para consistencia total */}
     <PageIntro
       variant="diners-blue"
-      eyebrow="People & Culture"
-      title="Tu carrera merece un estándar premium"
-      description="No solo ofrecemos beneficios; construimos un ecosistema donde el talento digital y financiero encuentra su máxima expresión bajo un estándar de excelencia internacional."
-      imageSrc="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974" // Imagen profesional/editorial
+      eyebrow=""
+      title="Tu carrera merece un estandar superior"
+      description="No solo ofrecemos beneficios; construimos un ecosistema donde el talento digital y financiero encuentra su maxima expresion con un nivel de excelencia internacional."
+      imageSrc="./fotomujer.png" // Imagen profesional/editorial
     />
 
     {/* BENEFICIOS: Cards con Imagen y Efecto de Elevación */}
@@ -59,7 +59,7 @@ export const BenefitsPage = () => (
               <img
                 src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
-                alt="Diners Professional Culture"
+                alt="Cultura profesional Diners"
               />
             </div>
 
@@ -83,14 +83,14 @@ export const BenefitsPage = () => (
               </span>
               <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6">
                 Un ecosistema de <br />
-                <span className="text-diners-blue-sky italic font-light">alto rendimiento.</span>
+                <span className="text-diners-blue-sky font-light">alto rendimiento.</span>
               </h2>
             </div>
 
             <div className="grid gap-10">
               {[
                 { t: 'Talento con Aceleración', d: 'Proyectos visibles desde el día uno con impacto real en la región.' },
-                { t: 'Marca de Prestigio', d: 'Respaldo de una red global con ejecución local de estándar premium.' },
+                { t: 'Marca de Prestigio', d: 'Respaldo de una red global con ejecucion local de estandar superior.' },
                 { t: 'Rutas de Proyección', d: 'Mentorías directas con líderes que están transformando el sector financiero.' }
               ].map((item, idx) => (
                 <div key={idx} className="flex gap-6 group">

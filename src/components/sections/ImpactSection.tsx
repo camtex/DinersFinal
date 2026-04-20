@@ -16,7 +16,7 @@ export const ImpactSection = () => {
         <div className="text-center max-w-2xl mx-auto mb-16">
 
           <h2 className="text-3xl md:text-4xl font-black text-diners-twilight tracking-tight leading-tight">
-            Cerrando la brecha de <span className="text-diners-lakefront italic">Oportunidades STEAM.</span>
+            Cerrando la brecha de <span className="text-diners-lakefront">oportunidades STEAM.</span>
           </h2>
           <p className="mt-5 text-base font-light text-diners-twilight-65 leading-relaxed max-w-xl mx-auto">
             El talento no tiene género, pero las oportunidades hoy sí. Estamos perdiendo innovación crucial al no integrar a más mujeres en la creación tecnológica.

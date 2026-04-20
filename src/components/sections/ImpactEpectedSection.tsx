@@ -8,7 +8,7 @@ export const ImpactExpectedSection = () => (
     <div className="container relative z-10">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-black italic">Tu evolución con nosotros.</h2>
+          <h2 className="text-4xl font-black">Tu evolucion con nosotros.</h2>
           <p className="mt-4 text-white/50 font-light max-w-xl mx-auto">
             No solo buscamos talento, diseñamos el entorno para que alcances tu máximo potencial dentro de la corporación.
           </p>
@@ -17,28 +17,28 @@ export const ImpactExpectedSection = () => (
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
-              title: "Scoring Real",
-              desc: "Tu perfil es evaluado con algoritmos de precisión para match directo.",
+              title: "Evaluacion real",
+              desc: "Tu perfil se evalua con criterios precisos para conectarte con oportunidades relevantes.",
               icon: <Target className="w-5 h-5" />,
-              tag: "Data Driven"
+              tag: "Analisis aplicado"
             },
             {
-              title: "Rutas Ágiles",
-              desc: "Procesos de selección optimizados: menos burocracia, más talento.",
+              title: "Rutas agiles",
+              desc: "Procesos de seleccion optimizados: menos burocracia y mas foco en tu talento.",
               icon: <Zap className="w-5 h-5" />,
-              tag: "Efficiency"
+              tag: "Eficiencia"
             },
             {
-              title: "Upskilling",
-              desc: "Acceso a rutas de aprendizaje basadas en las vacantes del mañana.",
+              title: "Desarrollo continuo",
+              desc: "Acceso a rutas de aprendizaje alineadas con las vacantes del manana.",
               icon: <TrendingUp className="w-5 h-5" />,
-              tag: "Growth"
+              tag: "Crecimiento"
             },
             {
-              title: "Certificación",
-              desc: "Validamos tus competencias bajo estándares de Diners Club.",
+              title: "Certificacion",
+              desc: "Validamos tus competencias con el estandar de Diners Club.",
               icon: <Award className="w-5 h-5" />,
-              tag: "Elite"
+              tag: "Excelencia"
             }
           ].map((item, i) => (
             <div key={i} className="group p-8 rounded-[2rem] bg-white/5 border border-white/10 hover:bg-white/[0.08] hover:border-diners-blue-sky/30 transition-all duration-500">

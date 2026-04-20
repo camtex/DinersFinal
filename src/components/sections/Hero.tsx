@@ -40,7 +40,7 @@ export const Hero = ({ onPrimaryAction, onSecondaryAction, imageSrc }: HeroProps
 
             <h1 className="mb-6 text-4xl font-black leading-[1.05] tracking-tight text-diners-twilight md:text-5xl xl:text-[4rem]">
               Una propuesta digital <br />
-              <span className="text-diners-lakefront font-light italic">alineada a Diners Club</span>
+              <span className="text-diners-lakefront font-light">alineada a Diners Club</span>
             </h1>
 
             <p className="mb-10 max-w-xl text-base font-light leading-relaxed text-diners-twilight-65 md:text-lg">

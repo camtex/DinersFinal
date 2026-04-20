@@ -45,7 +45,7 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
           <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="max-w-2xl">
               <Badge className="mb-6 border-none bg-[#00A3E0] px-4 py-1 text-[10px] font-black uppercase tracking-[0.3em] text-white">
-                Career Path Selection
+                Ruta profesional recomendada
               </Badge>
               <h3 className="text-4xl font-black tracking-tighter md:text-6xl lg:text-7xl leading-[0.9]">
                 {role.title}
@@ -94,9 +94,9 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
                     <h4 className="text-2xl font-black text-[#041E42] tracking-tight mb-2 uppercase text-xs tracking-[0.2em] opacity-40">Etapa {index + 1}</h4>
                     <h5 className="text-2xl font-black text-[#041E42] mb-4">{step}</h5>
                     <p className="text-slate-500 font-light leading-relaxed max-w-md">
-                      {index === 0 ? "Inicia tu proceso conectando tu visión con la nuestra. Buscamos perfiles que desafíen el status quo."
-                        : index === role.route.length - 1 ? "Comienza tu entrenamiento de alto nivel y despliega tu potencial en la red global."
-                          : "Evaluaciones dinámicas centradas en tus habilidades core y adaptabilidad cultural."}
+                      {index === 0 ? "Inicia tu proceso conectando tu vision con la nuestra. Buscamos perfiles que desafien lo establecido."
+                        : index === role.route.length - 1 ? "Comienza tu etapa de integracion y despliega tu potencial dentro de nuestra red."
+                          : "Evaluaciones dinamicas centradas en tus habilidades clave y tu adaptacion cultural."}
                     </p>
                   </div>
                 </div>
@@ -109,10 +109,10 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
 
                 {/* CARD DE ACCIÓN */}
                 <div className="rounded-[3rem] bg-white p-10 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.05)] border border-white">
-                  <h4 className="text-2xl font-black text-[#041E42] mb-6 tracking-tight italic">Consolida tu postulación</h4>
+                  <h4 className="text-2xl font-black text-[#041E42] mb-6 tracking-tight">Consolida tu postulacion</h4>
                   <div className="space-y-4 mb-10">
                     {[
-                      { icon: ShieldCheck, text: "Garantía de Feedback real" },
+                      { icon: ShieldCheck, text: "Retroalimentacion real" },
                       { icon: Sparkles, text: "Seguimiento personalizado" },
                       { icon: CheckCircle2, text: "Cultura 100% colaborativa" }
                     ].map((item, i) => (
@@ -127,7 +127,7 @@ export const RouteDetails = ({ role, onClose }: { role: Role, onClose: () => voi
                     onClick={handleApply}
                     className="h-16 w-full rounded-full bg-[#00A3E0] text-xs font-black uppercase tracking-[0.3em] text-white transition-all hover:bg-[#041E42] hover:scale-[1.02] shadow-xl shadow-[#00A3E0]/20"
                   >
-                    Postular Ahora <ArrowRight className="ml-2 h-4 w-4" />
+                    Postular ahora <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </div>
 

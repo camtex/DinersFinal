@@ -19,7 +19,7 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
     : (logoSrc || "/ColorDC_horizontal.png");
 
   const ctaPath = isLoggedIn ? '/dashboard' : '/postula';
-  const ctaLabel = isLoggedIn ? 'Perfil' : 'Iniciar';
+  const ctaLabel = isLoggedIn ? 'Perfil' : '¡Unete!';
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => setIsOpen(false), [location]);

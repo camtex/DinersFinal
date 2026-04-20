@@ -6,6 +6,7 @@ import { ExplorationSection } from '@/components/sections/ExplorationSection';
 import { ResultsSection } from '@/components/sections/ResultsSection';
 import type { Role } from '@/types';
 import { saveStoredQuizTraits } from '@/lib/dashboardStorage';
+import { getSelectionsFromTraits } from '@/data/mockData';
 
 type ExplorationPageProps = {
   selectedSkills: string[];
@@ -32,37 +33,6 @@ export const ExplorationPage = ({
   filteredRoles,
   scrollToExploration,
 }: ExplorationPageProps) => {
-  const quizMappings: Record<string, { skills: string[]; interests: string[] }> = {
-    tech: {
-      skills: ['React', 'Node.js', 'Cloud'],
-      interests: ['Programacion', 'Arquitectura'],
-    },
-    finance: {
-      skills: ['SQL', 'Data Governance', 'Politicas de Datos'],
-      interests: ['Datos', 'Estrategia'],
-    },
-    design: {
-      skills: ['Figma', 'User Research', 'Prototipado'],
-      interests: ['Diseno', 'Experiencia de Usuario'],
-    },
-    cyber: {
-      skills: ['SOC', 'Pentesting', 'ISO 27001'],
-      interests: ['Seguridad', 'Investigacion'],
-    },
-    ops: {
-      skills: ['Agile', 'DevOps', 'Gestion de Equipos'],
-      interests: ['Calidad', 'Liderazgo Tecnico'],
-    },
-    commercial: {
-      skills: ['Innovacion', 'Liderazgo Ejecutivo', 'Gestion de Portafolio'],
-      interests: ['Transformacion Digital', 'Liderazgo'],
-    },
-    talent: {
-      skills: ['Mentoring', 'Vision Estrategica'],
-      interests: ['Aprendizaje', 'Mentoria'],
-    },
-  };
-
   return (
     <>
       <PageIntro
@@ -87,15 +57,10 @@ export const ExplorationPage = ({
         }}
         onQuizComplete={(traits: string[]) => {
           saveStoredQuizTraits(traits);
-          const selectedMappings = traits
-            .map(trait => quizMappings[trait])
-            .filter(Boolean);
+          const { skills, interests } = getSelectionsFromTraits(traits);
 
-          const mergedSkills = Array.from(new Set(selectedMappings.flatMap(item => item.skills)));
-          const mergedInterests = Array.from(new Set(selectedMappings.flatMap(item => item.interests)));
-
-          setSelectedSkills(mergedSkills);
-          setSelectedInterests(mergedInterests);
+          setSelectedSkills(skills);
+          setSelectedInterests(interests);
           setShowResults(true);
           setTimeout(() => {
             document.getElementById('resultados')?.scrollIntoView({ behavior: 'smooth' });

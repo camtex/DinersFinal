@@ -49,7 +49,7 @@ export const Footer = ({ logoSrc }: FooterProps) => {
       links: [
         { name: "Cuotas Sin Intereses", url: "https://dinersclub.pe/misprivilegios/home?store_type=promotions" },
         { name: "ClubMiles", url: "https://dinersclub.pe/clubmiles" },
-        { name: "Club Assistance", url: "https://dinersclub.pe/club-assistance" },
+        { name: "Asistencia Club", url: "https://dinersclub.pe/club-assistance" },
         { name: "Salas VIP", url: "https://dinersclub.pe/salas-vip-internacionales" }
       ]
     },
@@ -89,7 +89,7 @@ export const Footer = ({ logoSrc }: FooterProps) => {
             />
 
             <p className="text-sm text-white/70 leading-relaxed max-w-xs">
-              Diners Club Perú — experiencia financiera premium con beneficios exclusivos.
+              Diners Club Perú — experiencia financiera de alto nivel con beneficios exclusivos.
             </p>
           </div>
 

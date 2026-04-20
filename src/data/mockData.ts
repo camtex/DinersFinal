@@ -18,13 +18,13 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'data',
-    name: 'Data & Analytics',
+    name: 'Datos y analitica',
     icon: React.createElement(TrendingUp, { className: "w-6 h-6" }),
     description: 'Transforma datos en decisiones estrategicas y modelos predictivos.'
   },
   {
     id: 'uxui',
-    name: 'UX/UI & Producto',
+    name: 'Experiencia y producto digital',
     icon: React.createElement(Target, { className: "w-6 h-6" }),
     description: 'Disena experiencias centradas en el usuario y productos innovadores.'
   },
@@ -36,7 +36,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     id: 'infra',
-    name: 'Infraestructura & Soporte',
+    name: 'Infraestructura y soporte',
     icon: React.createElement(Globe, { className: "w-6 h-6" }),
     description: 'Manten la base tecnologica solida y disponible 24/7.'
   },
@@ -48,54 +48,90 @@ export const ROLES: Role[] = [
     title: 'Gerente de Tecnologia',
     category: 'dev',
     description: 'Lidera la vision tecnologica global y la estrategia de innovacion de Diners Club Peru.',
-    skills: ['Vision Estrategica', 'Liderazgo Ejecutivo', 'Gestion de Portafolio', 'Innovacion'],
-    interests: ['Estrategia', 'Transformacion Digital', 'Liderazgo'],
-    route: ['Evaluacion Ejecutiva', 'Entrevista con Directorio', 'Plan Estrategico', 'Onboarding']
+    skills: ['Vision estrategica', 'Liderazgo ejecutivo', 'Gestion de portafolio', 'Innovacion'],
+    interests: ['Estrategia', 'Transformacion digital', 'Liderazgo'],
+    route: ['Evaluacion ejecutiva', 'Entrevista con directorio', 'Plan estrategico', 'Integracion']
   },
   {
     id: '2',
     title: 'Subgerente de Desarrollo',
     category: 'dev',
     description: 'Supervisa los equipos de ingenieria y asegura la calidad tecnica de todas las soluciones.',
-    skills: ['Arquitectura de Software', 'Gestion de Equipos', 'Agile', 'DevOps'],
-    interests: ['Ingenieria', 'Liderazgo Tecnico', 'Calidad'],
-    route: ['Entrevista Tecnica', 'Evaluacion de Liderazgo', 'Case Study', 'Contratacion']
+    skills: ['Arquitectura de software', 'Gestion de equipos', 'Metodologias agiles', 'DevOps'],
+    interests: ['Ingenieria', 'Liderazgo tecnico', 'Calidad'],
+    route: ['Entrevista tecnica', 'Evaluacion de liderazgo', 'Caso practico', 'Contratacion']
   },
   {
     id: '3',
-    title: 'Jefe de Data Governance',
+    title: 'Jefe de Gobierno de Datos',
     category: 'data',
     description: 'Asegura la calidad, integridad y seguridad de los activos de datos de la organizacion.',
-    skills: ['Data Governance', 'SQL', 'Politicas de Datos', 'Compliance'],
+    skills: ['Gobierno de datos', 'SQL', 'Politicas de datos', 'Cumplimiento'],
     interests: ['Datos', 'Gobernanza', 'Estrategia'],
-    route: ['Prueba de Datos', 'Entrevista Especializada', 'Validacion de Procesos', 'Ingreso']
+    route: ['Prueba de datos', 'Entrevista especializada', 'Validacion de procesos', 'Ingreso']
   },
   {
     id: '4',
-    title: 'Especialista de Desarrollo Full Stack',
+    title: 'Especialista de Desarrollo Integral',
     category: 'dev',
     description: 'Desarrollador experto encargado de las funcionalidades criticas y mentoria de analistas.',
-    skills: ['React', 'Node.js', 'Cloud', 'Mentoring'],
+    skills: ['React', 'Node.js', 'Nube', 'Mentoria'],
     interests: ['Programacion', 'Mentoria', 'Arquitectura'],
-    route: ['Live Coding', 'Entrevista Tecnica', 'Fit Cultural', 'Oferta']
+    route: ['Codigo en vivo', 'Entrevista tecnica', 'Afinidad cultural', 'Oferta']
   },
   {
     id: '5',
     title: 'Analista de Ciberseguridad',
     category: 'cyber',
     description: 'Monitorea y responde ante incidentes de seguridad, protegiendo el perimetro digital.',
-    skills: ['SOC', 'Pentesting', 'ISO 27001', 'Analisis de Riesgos'],
+    skills: ['SOC', 'Pruebas de penetracion', 'ISO 27001', 'Analisis de riesgos'],
     interests: ['Seguridad', 'Investigacion', 'Tecnologia'],
-    route: ['Evaluacion de Seguridad', 'Entrevista Tecnica', 'Background Check', 'Ingreso']
+    route: ['Evaluacion de seguridad', 'Entrevista tecnica', 'Validacion de antecedentes', 'Ingreso']
   },
   {
     id: '6',
     title: 'Practicante de UX/UI',
     category: 'uxui',
     description: 'Apoya en el diseno de interfaces y prototipado, aprendiendo de los mejores especialistas.',
-    skills: ['Figma', 'User Research', 'Prototipado', 'Empatia'],
+    skills: ['Figma', 'Investigacion de usuarios', 'Prototipado', 'Empatia'],
     interests: ['Diseno', 'Aprendizaje', 'Experiencia de Usuario'],
-    route: ['Revision de Portafolio', 'Entrevista Inicial', 'Pequeno Reto de Diseno', 'Convenio']
+    route: ['Revision de portafolio', 'Entrevista inicial', 'Pequeno reto de diseno', 'Convenio']
+  },
+  {
+    id: '7',
+    title: 'Analista de Infraestructura Cloud',
+    category: 'infra',
+    description: 'Administra servicios en la nube, monitoreo y continuidad operativa para plataformas criticas.',
+    skills: ['Nube', 'DevOps', 'Automatizacion', 'Monitoreo'],
+    interests: ['Infraestructura', 'Continuidad', 'Arquitectura'],
+    route: ['Filtro curricular', 'Entrevista tecnica', 'Ejercicio de arquitectura', 'Ingreso']
+  },
+  {
+    id: '8',
+    title: 'Analista de Producto Digital',
+    category: 'uxui',
+    description: 'Conecta necesidades del negocio y de los usuarios para priorizar funcionalidades de alto impacto.',
+    skills: ['Discovery', 'Figma', 'Analisis de negocio', 'Prototipado'],
+    interests: ['Producto', 'Experiencia de Usuario', 'Innovacion'],
+    route: ['Revision de casos', 'Entrevista con producto', 'Presentacion de propuesta', 'Oferta']
+  },
+  {
+    id: '9',
+    title: 'Especialista en Automatizacion de Procesos',
+    category: 'dev',
+    description: 'Construye soluciones de automatizacion para reducir tareas manuales y acelerar operaciones clave.',
+    skills: ['Automatizacion', 'Python', 'Integraciones', 'Analisis de procesos'],
+    interests: ['Optimizacion', 'Transformacion digital', 'Ingenieria'],
+    route: ['Entrevista inicial', 'Reto practico', 'Entrevista tecnica', 'Contratacion']
+  },
+  {
+    id: '10',
+    title: 'Analista de Riesgo Operacional Digital',
+    category: 'cyber',
+    description: 'Evalua controles, riesgos y continuidad en procesos digitales para proteger la operacion del negocio.',
+    skills: ['Analisis de riesgos', 'Cumplimiento', 'Continuidad', 'Control interno'],
+    interests: ['Seguridad', 'Control', 'Operacion'],
+    route: ['Evaluacion de criterios', 'Entrevista especializada', 'Caso de riesgo', 'Ingreso']
   }
 ];
 
@@ -114,7 +150,7 @@ export const VACANCIES: Vacancy[] = [
     id: 'vac-data',
     title: 'Analista de Datos',
     type: 'Tiempo completo',
-    area: 'Data & Analytics',
+    area: 'Datos y analitica',
     description: 'Rol orientado a transformacion de datos, visualizacion y soporte a decisiones clave del negocio.',
   },
   {
@@ -143,12 +179,73 @@ export const VACANCIES: Vacancy[] = [
 export const TRAIT_LABELS: Record<string, string> = {
   tech: 'Innovacion y tecnologia',
   finance: 'Analisis y estrategia',
-  design: 'Experiencia y producto',
+  design: 'Experiencia y producto digital',
   cyber: 'Seguridad y control',
   ops: 'Operacion y ejecucion',
   commercial: 'Conexion y negocio',
   talent: 'Acompanamiento y talento',
 };
+
+export const QUIZ_ROLE_MAPPINGS: Record<string, { skills: string[]; interests: string[] }> = {
+  tech: {
+    skills: ['React', 'Node.js', 'Nube', 'Automatizacion'],
+    interests: ['Programacion', 'Arquitectura', 'Ingenieria'],
+  },
+  finance: {
+    skills: ['SQL', 'Gobierno de datos', 'Politicas de datos', 'Analisis de negocio'],
+    interests: ['Datos', 'Estrategia', 'Control'],
+  },
+  design: {
+    skills: ['Figma', 'Investigacion de usuarios', 'Prototipado', 'Discovery'],
+    interests: ['Diseno', 'Experiencia de Usuario', 'Producto'],
+  },
+  cyber: {
+    skills: ['SOC', 'Pruebas de penetracion', 'Analisis de riesgos', 'Control interno'],
+    interests: ['Seguridad', 'Investigacion', 'Control'],
+  },
+  ops: {
+    skills: ['Metodologias agiles', 'DevOps', 'Gestion de equipos', 'Continuidad'],
+    interests: ['Calidad', 'Liderazgo tecnico', 'Operacion'],
+  },
+  commercial: {
+    skills: ['Innovacion', 'Liderazgo ejecutivo', 'Gestion de portafolio', 'Analisis de negocio'],
+    interests: ['Transformacion digital', 'Liderazgo', 'Producto'],
+  },
+  talent: {
+    skills: ['Mentoria', 'Vision estrategica', 'Empatia'],
+    interests: ['Aprendizaje', 'Mentoria', 'Experiencia de Usuario'],
+  },
+};
+
+export const getSelectionsFromTraits = (traits: string[]) => {
+  const selectedMappings = traits
+    .map(trait => QUIZ_ROLE_MAPPINGS[trait])
+    .filter(Boolean);
+
+  return {
+    skills: Array.from(new Set(selectedMappings.flatMap(item => item.skills))),
+    interests: Array.from(new Set(selectedMappings.flatMap(item => item.interests))),
+  };
+};
+
+export const getRecommendedRolesFromTraits = (traits: string[]) => {
+  const { skills, interests } = getSelectionsFromTraits(traits);
+
+  if (skills.length === 0 && interests.length === 0) {
+    return [] as Array<Role & { score: number }>;
+  }
+
+  return ROLES.map(role => {
+    const skillMatch = role.skills.filter(skill => skills.includes(skill)).length;
+    const interestMatch = role.interests.filter(interest => interests.includes(interest)).length;
+    return { ...role, score: skillMatch + interestMatch };
+  })
+    .filter(role => role.score > 0)
+    .sort((a, b) => b.score - a.score);
+};
+
+export const getCategoryNameById = (categoryId: string) =>
+  CATEGORIES.find(category => category.id === categoryId)?.name ?? 'Ruta profesional';
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
@@ -263,9 +360,9 @@ export const LEARNING_PATHS: LearningPath[] = [
     icon: React.createElement(TrendingUp, { className: "w-5 h-5" })
   },
   {
-    title: "UX/UI Design Starter",
+    title: "Inicio en diseno UX/UI",
     duration: "5 semanas",
-    modules: ["User Research", "Figma Basico", "Prototipado"],
+    modules: ["Investigacion de usuarios", "Figma basico", "Prototipado"],
     icon: React.createElement(Zap, { className: "w-5 h-5" })
   }
 ];
@@ -278,8 +375,8 @@ export const CHALLENGES: Challenge[] = [
     points: 500
   },
   {
-    title: "Data Insights",
-    description: "Analiza un set de datos (simulado) para predecir que beneficios prefieren las jovenes de 18 anos.",
+    title: "Analisis de datos",
+    description: "Analiza un conjunto de datos simulado para predecir que beneficios prefieren las jovenes de 18 anos.",
     difficulty: "Avanzado",
     points: 800
   }

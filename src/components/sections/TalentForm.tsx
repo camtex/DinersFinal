@@ -138,7 +138,7 @@ export const TalentForm = () => {
       });
 
       setSubmitted(true);
-      setStatusMessage("Autenticacion con Google exitosa.");
+      setStatusMessage("Acceso con Google confirmado.");
     } catch (error: any) {
       if (error?.code !== "auth/cancelled-popup-request" && error?.code !== "auth/popup-closed-by-user") {
         setErrorMessage("No pudimos vincular tu cuenta de Google. Revisa la configuracion de Firebase e intentalo de nuevo.");
@@ -152,7 +152,7 @@ export const TalentForm = () => {
     return (
       <div className="flex h-screen flex-col justify-center bg-diners-twilight py-40 text-center text-white">
         <LoaderCircle className="mx-auto mb-6 h-12 w-12 animate-spin text-diners-blue-sky" />
-        <h2 className="text-4xl font-black italic">Validando acceso...</h2>
+        <h2 className="text-4xl font-black">Validando acceso...</h2>
       </div>
     );
   }

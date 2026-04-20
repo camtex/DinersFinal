@@ -13,7 +13,7 @@ export const ExplorationSection = ({
   onShowResults,
   onQuizComplete
 }: any) => {
-  const [mode, setMode] = useState<'manual' | 'quiz'>('quiz');
+  const [mode, setMode] = useState<'manual' | 'test'>('test');
 
   const toggleSkill = (skill: string) => {
     setSelectedSkills((prev: string[]) =>
@@ -44,11 +44,11 @@ export const ExplorationSection = ({
           {/* SELECTOR DE MODO COMPACTO */}
           <div className="mt-8 inline-flex p-1 bg-slate-200/50 rounded-full backdrop-blur-sm">
             <button
-              onClick={() => setMode('quiz')}
-              className={`rounded-full px-8 py-2.5 text-xs font-bold transition-all ${mode === 'quiz' ? 'bg-white text-[#00A3E0] shadow-sm' : 'text-slate-500 hover:text-slate-800'
+              onClick={() => setMode('test')}
+              className={`rounded-full px-8 py-2.5 text-xs font-bold transition-all ${mode === 'test' ? 'bg-white text-[#00A3E0] shadow-sm' : 'text-slate-500 hover:text-slate-800'
                 }`}
             >
-              Quiz
+              Test vocacional
             </button>
             <button
               onClick={() => setMode('manual')}
@@ -62,7 +62,7 @@ export const ExplorationSection = ({
 
         {/* CONTENIDO DINÁMICO */}
         <div className="mx-auto max-w-5xl">
-          {mode === 'quiz' ? (
+          {mode === 'test' ? (
             <QuizSection onComplete={onQuizComplete} />
           ) : (
             <div className="space-y-8">

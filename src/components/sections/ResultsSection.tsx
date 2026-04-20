@@ -63,7 +63,7 @@ export const ResultsSection = ({
               <div className="w-16 h-16 bg-diners-gray-1 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Search className="w-8 h-8 text-diners-gray-4" />
               </div>
-              <h3 className="text-xl font-bold text-diners-twilight mb-2">No encontramos un match exacto</h3>
+              <h3 className="text-xl font-bold text-diners-twilight mb-2">No encontramos una coincidencia exacta</h3>
               <p className="text-diners-twilight-65 mb-6">Intenta seleccionar más habilidades o intereses para ampliar la búsqueda.</p>
               <Button onClick={scrollToExploration} variant="secondary">Ajustar Selección</Button>
             </Card>

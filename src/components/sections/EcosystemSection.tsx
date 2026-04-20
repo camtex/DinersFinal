@@ -30,7 +30,7 @@ export const EcosystemSection = () => (
         {[
           {
             icon: <Search className="w-5 h-5" />,
-            title: "Quiz Vocacional",
+            title: "Test vocacional",
             desc: "Identifica tus fortalezas y áreas de interés en el mundo digital."
           },
           {

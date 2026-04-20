@@ -45,7 +45,19 @@ export const saveStoredQuizTraits = (traits: string[]) => {
   writeJson(QUIZ_TRAITS_KEY, traits);
 };
 
+export const clearStoredQuizTraits = () => {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(QUIZ_TRAITS_KEY);
+  }
+};
+
 export const getStoredApplications = () => readJson<VacancyApplication[]>(APPLICATIONS_KEY, []);
+
+export const clearStoredApplications = () => {
+  if (typeof window !== "undefined") {
+    window.localStorage.removeItem(APPLICATIONS_KEY);
+  }
+};
 
 export const isUserRegistered = () => Boolean(getStoredUserProfile());
 
@@ -97,6 +109,8 @@ export const saveVacancyApplication = (application: Omit<VacancyApplication, "id
       vacancyId: application.vacancyId,
       vacancyTitle: application.vacancyTitle,
       area: application.area,
+      type: application.type,
+      description: application.description,
       appliedAt: new Date().toISOString(),
       fullName: application.fullName,
       linkedinUrl: application.linkedinUrl,
@@ -111,8 +125,8 @@ export const saveVacancyApplication = (application: Omit<VacancyApplication, "id
 
 // Esta función elimina una postulación específica por su ID de vacante
 export const removeVacancyApplication = (vacancyId: string) => {
-  const current = JSON.parse(localStorage.getItem('diners_applications') || '[]');
-  const filtered = current.filter((app: any) => app.vacancyId !== vacancyId);
-  localStorage.setItem('diners_applications', JSON.stringify(filtered));
+  const current = getStoredApplications();
+  const filtered = current.filter(app => app.vacancyId !== vacancyId);
+  writeJson(APPLICATIONS_KEY, filtered);
   return filtered;
 };

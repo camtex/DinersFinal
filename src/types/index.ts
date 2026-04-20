@@ -66,6 +66,8 @@ export interface VacancyApplication {
   vacancyId: string;
   vacancyTitle: string;
   area: string;
+  type: string;
+  description: string;
   appliedAt: string;
   fullName: string;
   linkedinUrl: string;
