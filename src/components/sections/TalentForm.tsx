@@ -34,7 +34,7 @@ export const TalentForm = () => {
     const completeRedirect = async () => {
       try {
         const result = await completeGoogleRedirectAccess();
-        if (result?.user) {
+        if (result) {
           setSubmitted(true);
           navigate(consumePostLoginRedirect() || "/dashboard", { replace: true });
         }
@@ -80,9 +80,14 @@ export const TalentForm = () => {
     setIsSubmitting(true);
 
     try {
-      await signInWithGoogleAccount();
+      const result = await signInWithGoogleAccount();
+      if (result?.user) {
+        setSubmitted(true);
+        navigate(consumePostLoginRedirect() || "/dashboard", { replace: true });
+      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Error al conectar con Google.");
+    } finally {
       setIsSubmitting(false);
     }
   };

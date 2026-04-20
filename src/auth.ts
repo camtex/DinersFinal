@@ -1,12 +1,11 @@
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  getRedirectResult,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   signInWithEmailLink,
-  signInWithRedirect,
+  signInWithPopup,
   signOut,
   updateProfile,
   type User,
@@ -182,18 +181,10 @@ export const loginWithEmailPassword = async ({
 };
 
 export const signInWithGoogleAccount = async () => {
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: "select_account" });
-  await signInWithRedirect(auth, provider);
-};
-
-export const completeGoogleRedirectAccess = async () => {
   try {
-    const result = await getRedirectResult(auth);
-
-    if (!result?.user) {
-      return null;
-    }
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+    const result = await signInWithPopup(auth, provider);
 
     await persistAuthenticatedUser({
       user: result.user,
@@ -205,6 +196,8 @@ export const completeGoogleRedirectAccess = async () => {
     throw new Error(getFirebaseErrorMessage(error, "No pudimos completar el acceso con Google."));
   }
 };
+
+export const completeGoogleRedirectAccess = async (): Promise<null> => null;
 
 export const sendAccessLink = async (profile: PendingProfile) => {
   await sendSignInLinkToEmail(auth, profile.email, getActionCodeSettings());
