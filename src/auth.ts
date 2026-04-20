@@ -2,7 +2,7 @@ import {
   GoogleAuthProvider,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
-  signInWithPopup,
+  //signInWithPopup,
   signInWithRedirect,
   signInWithEmailLink,
   signOut,
