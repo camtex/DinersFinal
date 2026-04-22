@@ -11,10 +11,11 @@ import { BenefitsPage } from './pages/BenefitsPage';
 import { VacanciesPage } from './pages/VacanciesPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { ROLES } from './data/mockData';
-import { isUserRegistered, setPostLoginRedirect } from './lib/dashboardStorage';
+import { clearStoredUserProfile, getStoredUserProfile, isUserRegistered, setPostLoginRedirect } from './lib/dashboardStorage';
 import { auth } from './firebase';
 import type { Role } from './types';
 import { onAuthStateChanged } from 'firebase/auth';
+import { getAuthenticatedUserProfile } from './auth';
 
 const ProtectedDashboardRoute = () => {
   if (isUserRegistered()) {
@@ -29,6 +30,7 @@ export default function App() {
   const brandLogoSrc = '';
   const heroImageSrc = '';
   const [isLoggedIn, setIsLoggedIn] = useState(isUserRegistered());
+  const [isAuthResolved, setIsAuthResolved] = useState(false);
 
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
@@ -52,12 +54,29 @@ export default function App() {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
-      setIsLoggedIn(Boolean(user) || isUserRegistered());
+    const unsubscribe = onAuthStateChanged(auth, async user => {
+      if (user) {
+        try {
+          await getAuthenticatedUserProfile(user);
+          setIsLoggedIn(true);
+        } catch (error) {
+          console.error('No pudimos sincronizar el perfil autenticado:', error);
+          setIsLoggedIn(Boolean(getStoredUserProfile()));
+        }
+      } else {
+        clearStoredUserProfile();
+        setIsLoggedIn(false);
+      }
+
+      setIsAuthResolved(true);
     });
 
     return unsubscribe;
   }, []);
+
+  if (!isAuthResolved) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-diners-white-sand font-sans selection:bg-diners-blue-sky/30">

@@ -15,11 +15,11 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const logoPath = isOpen
-    ? "/TDC_horizontal.png"
-    : (logoSrc || "/ColorDC_horizontal.png");
+    ? '/TDC_horizontal.png'
+    : (logoSrc || '/ColorDC_horizontal.png');
 
   const ctaPath = isLoggedIn ? '/dashboard' : '/postula';
-  const ctaLabel = isLoggedIn ? 'Perfil' : '¡Unete!';
+  const ctaLabel = isLoggedIn ? 'Dashboard' : 'Unete';
 
   useEffect(() => setIsOpen(false), [location]);
 
@@ -44,7 +44,7 @@ export const Navbar = ({ logoSrc, isLoggedIn = false }: { logoSrc?: string; isLo
               {({ isActive }) => (
                 <motion.span
                   initial="rest"
-                  animate={isActive ? "active" : "rest"}
+                  animate={isActive ? 'active' : 'rest'}
                   whileHover="hover"
                   className={`relative py-3 text-[11px] uppercase tracking-[0.22em] text-[#041E42] transition-all ${isActive ? 'font-black' : 'font-medium opacity-70 hover:opacity-100'}`}
                 >

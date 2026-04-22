@@ -14,6 +14,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "./firebase";
 import { saveStoredUserProfile } from "./lib/dashboardStorage";
+import type { UserProfile } from "./types";
 
 type AccessMode = "login" | "register";
 
@@ -98,15 +99,6 @@ export const persistAuthenticatedUser = async ({
   const resolvedLastName = lastName?.trim() || existingData.lastName || displayNameParts.lastName;
   const fullName = `${resolvedFirstName} ${resolvedLastName}`.trim();
 
-  saveStoredUserProfile({
-    uid: user.uid,
-    email: user.email ?? "",
-    firstName: resolvedFirstName,
-    lastName: resolvedLastName,
-    fullName,
-    lastAccessMode: mode,
-  });
-
   await setDoc(
     userRef,
     {
@@ -123,7 +115,42 @@ export const persistAuthenticatedUser = async ({
     { merge: true },
   );
 
+  const resolvedRole = (existingData.role || "postulante") as UserProfile["role"];
+
+  saveStoredUserProfile({
+    uid: user.uid,
+    email: user.email ?? "",
+    firstName: resolvedFirstName,
+    lastName: resolvedLastName,
+    fullName,
+    role: resolvedRole,
+    lastAccessMode: mode,
+  });
+
   return { fullName };
+};
+
+export const getAuthenticatedUserProfile = async (user: User): Promise<UserProfile> => {
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+  const existingData = userSnap.exists() ? userSnap.data() : {};
+  const displayNameParts = splitDisplayName(user.displayName);
+
+  const profile: UserProfile = {
+    uid: user.uid,
+    email: user.email ?? String(existingData.email ?? ""),
+    firstName: String(existingData.firstName ?? displayNameParts.firstName ?? ""),
+    lastName: String(existingData.lastName ?? displayNameParts.lastName ?? ""),
+    fullName: String(
+      existingData.fullName ??
+      `${existingData.firstName ?? displayNameParts.firstName ?? ""} ${existingData.lastName ?? displayNameParts.lastName ?? ""}`.trim(),
+    ),
+    role: (existingData.role || "postulante") as UserProfile["role"],
+    lastAccessMode: existingData.lastAccessMode as UserProfile["lastAccessMode"] | undefined,
+  };
+
+  saveStoredUserProfile(profile);
+  return profile;
 };
 
 export const registerWithEmailPassword = async ({

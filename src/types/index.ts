@@ -1,5 +1,7 @@
 import React from 'react';
 
+export type UserRole = 'postulante' | 'admin';
+
 export interface Role {
   id: string;
   title: string;
@@ -58,11 +60,15 @@ export interface UserProfile {
   lastName: string;
   fullName: string;
   email: string;
+  role: UserRole;
   lastAccessMode?: "login" | "register";
 }
 
 export interface VacancyApplication {
   id: string;
+  applicantUid: string;
+  applicantEmail: string;
+  applicantRole?: UserRole;
   vacancyId: string;
   vacancyTitle: string;
   area: string;
